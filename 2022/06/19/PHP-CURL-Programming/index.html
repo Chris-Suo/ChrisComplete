@@ -1,0 +1,1326 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Chris Suo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Michael Schrenk 著 &#x2F; 藍子軒 譯 Part I 基本概念與技術Chapter 1. 網路機器人是什麼？能吃嗎？ 解放網際網路真正的淺力 對程式開發者的用處：有趣、讓駭客行為變得有建設性   對企業領導者的用處：客製化應用、小投資大收穫  Chapter 2. 關於網路機器人的一些構想 從瀏覽器的限制中獲取靈感：   TrackRates.com : 彙整篩選飯店房價">
+<meta property="og:type" content="article">
+<meta property="og:title" content="網路機器人、網路蜘蛛與網路爬蟲 PHP&#x2F;CURL程式設計指南(第二版)">
+<meta property="og:url" content="http://example.com/2022/06/19/PHP-CURL-Programming/index.html">
+<meta property="og:site_name" content="Chris Complete">
+<meta property="og:description" content="Michael Schrenk 著 &#x2F; 藍子軒 譯 Part I 基本概念與技術Chapter 1. 網路機器人是什麼？能吃嗎？ 解放網際網路真正的淺力 對程式開發者的用處：有趣、讓駭客行為變得有建設性   對企業領導者的用處：客製化應用、小投資大收穫  Chapter 2. 關於網路機器人的一些構想 從瀏覽器的限制中獲取靈感：   TrackRates.com : 彙整篩選飯店房價">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/img/phpcurl_cover.png">
+<meta property="article:published_time" content="2022-06-19T08:07:34.000Z">
+<meta property="article:modified_time" content="2022-06-19T08:36:01.125Z">
+<meta property="article:author" content="Chris Suo">
+<meta property="article:tag" content="網路爬蟲">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/img/phpcurl_cover.png">
+  
+  
+  
+  <title>網路機器人、網路蜘蛛與網路爬蟲 PHP/CURL程式設計指南(第二版) - Chris Complete</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 40vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Chris Complete</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/phpcurl_cover.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="網路機器人、網路蜘蛛與網路爬蟲 PHP/CURL程式設計指南(第二版)"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-06-19 16:07" pubdate>
+          June 19, 2022 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          25k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          211 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">網路機器人、網路蜘蛛與網路爬蟲 PHP/CURL程式設計指南(第二版)</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p><img src="/img/phpcurl_cover.png" srcset="/img/loading.gif" lazyload><br>Michael Schrenk 著 &#x2F; 藍子軒 譯</p>
+<h2 id="Part-I-基本概念與技術"><a href="#Part-I-基本概念與技術" class="headerlink" title="Part I 基本概念與技術"></a>Part I 基本概念與技術</h2><h3 id="Chapter-1-網路機器人是什麼？能吃嗎？"><a href="#Chapter-1-網路機器人是什麼？能吃嗎？" class="headerlink" title="Chapter 1. 網路機器人是什麼？能吃嗎？"></a>Chapter 1. 網路機器人是什麼？能吃嗎？</h3><ul>
+<li>解放網際網路真正的淺力</li>
+<li>對程式開發者的用處：<br>有趣、讓駭客行為變得有建設性  </li>
+<li>對企業領導者的用處：<br>客製化應用、小投資大收穫</li>
+</ul>
+<h3 id="Chapter-2-關於網路機器人的一些構想"><a href="#Chapter-2-關於網路機器人的一些構想" class="headerlink" title="Chapter 2. 關於網路機器人的一些構想"></a>Chapter 2. 關於網路機器人的一些構想</h3><ul>
+<li>從瀏覽器的限制中獲取靈感：</li>
+</ul>
+<ol>
+<li>TrackRates.com : 彙整篩選飯店房價  </li>
+<li>WebSiteOptimization.com : 分析網站效能  </li>
+<li>Pokerbot : 撲克牌機器人，模仿行為</li>
+</ol>
+<h3 id="Chapter-3-下載網頁"><a href="#Chapter-3-下載網頁" class="headerlink" title="Chapter 3. 下載網頁"></a>Chapter 3. 下載網頁</h3><ul>
+<li>把它想成是檔案，而不是網頁  </li>
+<li>利用PHP的內建函式來下載檔案</li>
+</ul>
+<p>1. 使用fopen() + fgets()</p>
+<pre><code class="hljs">&lt;?php
+$target = &quot;http://www.webbotsspidersscreenscrapers.com/hello_world.html&quot;;
+$file_handle = fopen($target, &quot;r&quot;);
+
+while(!feof($file_handle))
+    echo fgets($file_handle, 4096);
+fclose($file_handle);
+?&gt;
+</code></pre>
+<p>2. 使用file()</p>
+<pre><code class="hljs">&lt;?php
+$target = &quot;http://www.webbotsspidersscreenscrapers.com/hello_world.html&quot;;
+$downloaded_page_array = file($target);
+
+for($xx=0; $xx&lt;cout($downloaded_page_array); $xx++)
+    echo $downloaded_page_array[$xx]
+?&gt;
+</code></pre>
+<ul>
+<li>PHP&#x2F;CURL簡介<br>名稱由來：client+URL</li>
+</ul>
+<ol>
+<li>支援多種傳輸協定  </li>
+<li>表單提交  </li>
+<li>基本身份認證  </li>
+<li>Cookie  </li>
+<li>重導向  </li>
+<li>假冒代理程式的名稱  </li>
+<li>引用參照的管理  </li>
+<li>Socket管理</li>
+</ol>
+<ul>
+<li>安裝PHP&#x2F;CURL  </li>
+<li>LIB_http</li>
+</ul>
+<h3 id="Chapter-4-基本解析技術"><a href="#Chapter-4-基本解析技術" class="headerlink" title="Chapter 4. 基本解析技術"></a>Chapter 4. 基本解析技術</h3><ul>
+<li>資料就藏在一堆標籤中  </li>
+<li>如果HTML寫得很爛，該如何解析？<br>&gt;使用HTMLTidy函式庫進行預處理 </li>
+<li>標準解析常函式  </li>
+<li>使用LIB_parse  </li>
+<li>幾個有用的PHP函式</li>
+</ul>
+<ol>
+<li>stristr() : 測試字串是否包含在字串，在乾草堆(haystack，未解析的文字)中找縫衣針(needle，子字串)，strstr()分大小寫  </li>
+<li>str_replace() : 字串取代  </li>
+<li>strip_tags() : 去除HTML格式  </li>
+<li>similar_test() : 比較相似程度</li>
+</ol>
+<ul>
+<li>最終的想法</li>
+</ul>
+<ol>
+<li>千萬不要信任一個原始碼寫得很差的網頁  </li>
+<li>解析時盡量區分成幾個小步驟  </li>
+<li>就算是除錯，也別用瀏覽器來展現解析結果  </li>
+<li>使用正規表示法時要特別謹慎</li>
+</ol>
+<h3 id="Chapter-5-運用正規表達式的高級解析技術"><a href="#Chapter-5-運用正規表達式的高級解析技術" class="headerlink" title="Chapter 5. 運用正規表達式的高級解析技術"></a>Chapter 5. 運用正規表達式的高級解析技術</h3><ul>
+<li>正規表示法的關鍵-模式匹配  </li>
+<li>PHP的正規表示法有兩種：</li>
+</ul>
+<ol>
+<li>PCRE(Perl相容正規表示法，以preg_開頭)</li>
+<li>POSIX(延伸正規表示法，以ereg開頭，PHP 5.3.0以後棄用)</li>
+</ol>
+<p>PHP正規表示法函式：</p>
+<pre><code class="hljs">preg_replace(pattern, replacement, subject)
+preg_match(pattern, subject)
+preg_match_all(pattern, subject, result_array)
+preg_split(pattern, subject)
+</code></pre>
+<ul>
+<li><p>透過範例學習模式<br>\d: 數字<br>\d+: 1個以上的數字<br>\b: 邊界<br>\D: 非數字字元<br>\b\D\D\D\b or \b\D{3}\b: 匹配連續3個字母<br>.: wildcard  </p>
+</li>
+<li><p>正規表示法中，對網路機器人開發者特別有趣的部分  </p>
+</li>
+<li><p>哪些情況適合(或不適合)使用正規表示法作為解析工具？<br>正規表示法的缺點：不擅長表達資料間的關聯性、正規表示法提供太多選擇、正規表示法比較難以除錯、正規表示法會讓你的程式碼變複雜</p>
+</li>
+</ul>
+<h3 id="Chapter-6-表單提交的自動化"><a href="#Chapter-6-表單提交的自動化" class="headerlink" title="Chapter 6. 表單提交的自動化"></a>Chapter 6. 表單提交的自動化</h3><ul>
+<li><p>對表單介面進行逆向工程  </p>
+</li>
+<li><p>表單處理器、資料欄位、傳遞方法、事件觸發  </p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">&lt;form <span class="hljs-type">name</span>=&quot;frml&quot; action=&quot;form_handler&quot;(表單處理器) <span class="hljs-keyword">method</span>=&quot;get&quot;(傳遞方法)&gt;<br>    &lt;<span class="hljs-keyword">input</span> <span class="hljs-keyword">type</span>=&quot;textbox&quot; <span class="hljs-type">name</span>=&quot;email&quot;&gt;(資料欄位)<br>    &lt;<span class="hljs-keyword">input</span> <span class="hljs-keyword">type</span>=&quot;submit&quot;&gt;(事件觸發)<br>&lt;/form&gt;<br></code></pre></td></tr></table></figure>
+<p><strong>表單處理器(Form Handler)</strong><br>action屬性，不指定的話則與處理表單為同一個頁面。<br><strong>資料欄位(Data Field)</strong><br>最重要的是名稱(name)與值(value)。<br><strong>傳遞方法(Method)</strong><br>GET：250字元長度左右、資料無法加密<br>POST：好幾MB、資料可以加密<br>Multipart Encoding：POST方法的延伸，可以傳送local檔案</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">&lt;form name=<span class="hljs-string">&quot;frm1&quot;</span> <span class="hljs-keyword">method</span>=<span class="hljs-string">&quot;POST&quot;</span> enctype=<span class="hljs-string">&quot;multipart/form-data&quot;</span> action=<span class="hljs-string">&quot;...&quot;</span>&gt;<br>&lt;/form&gt;<br><br><span class="hljs-comment">//script版本：</span><br>$post = <span class="hljs-built_in">array</span>(<span class="hljs-string">&quot;uploadedfile&quot;</span> =&gt; <span class="hljs-string">&quot;@&quot;</span>.$full_path_name_of_file);<br>$ch = curl<span class="hljs-constructor">_init()</span>;<br>curl<span class="hljs-constructor">_setopt($<span class="hljs-params">ch</span>, CURLOPT_URL, $<span class="hljs-params">form_action_URL</span>)</span>;<br>curl<span class="hljs-constructor">_setopt($<span class="hljs-params">ch</span>, CURLOPT_POST, <span class="hljs-params">true</span>)</span>;<br>curl<span class="hljs-constructor">_setopt($<span class="hljs-params">ch</span>, CURLOPT_POSTFIELDS, $<span class="hljs-params">post</span>)</span>;<br>$response = curl<span class="hljs-constructor">_exec($<span class="hljs-params">ch</span>)</span>;<br></code></pre></td></tr></table></figure>
+<p><strong>事件觸發(Event Trigger)</strong>  </p>
+</li>
+<li><p>無法預測的表單</p>
+</li>
+</ul>
+<ol>
+<li>JavaScript：有可能改變表單  </li>
+<li>機器生成HTML的可讀性  </li>
+<li>Cookie的存在</li>
+</ol>
+<ul>
+<li>表單的分析<br>如果包含session id就需要先下載網頁進行解析</li>
+</ul>
+<h3 id="Chapter-7-管理大量的資料"><a href="#Chapter-7-管理大量的資料" class="headerlink" title="Chapter 7. 管理大量的資料"></a>Chapter 7. 管理大量的資料</h3><ul>
+<li>資料的組織化<br>根據資料特性選擇儲存結構<br><strong>命名慣例</strong></li>
+</ul>
+<ol>
+<li>切實執行  </li>
+<li>使用物件的類型命名而非本身的名稱  </li>
+<li>考慮使用此結構的對象(人？電腦？)  </li>
+<li>定義命名格式  </li>
+<li>對標籤使用同一詞性  </li>
+<li>命名考慮排序方便性<br><strong>把資料儲存在結構化的檔案目錄之中</strong><br><strong>將文字儲存到資料庫中</strong>  <figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-comment">//LIB_mysql</span><br><span class="hljs-function"><span class="hljs-title">insert</span><span class="hljs-params">()</span></span><br><span class="hljs-function"><span class="hljs-title">update</span><span class="hljs-params">()</span></span><br><span class="hljs-function"><span class="hljs-title">exe_sql</span><span class="hljs-params">()</span></span><br></code></pre></td></tr></table></figure>
+<strong>將圖像儲存到資料庫中</strong><br>將圖檔轉成blob  <figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-regexp">//</span> 透過Base-<span class="hljs-number">64</span>編碼<br><span class="hljs-variable">$data_array</span>[<span class="hljs-string">&#x27;IMAGE&#x27;</span>] = base64_encode(file_get_contents(<span class="hljs-variable">$file_path</span>));<br><br><span class="hljs-regexp">//</span> 顯示資料庫內圖檔<br>&lt;img src=<span class="hljs-string">&quot;show_image.php?img_id=6&quot;</span>&gt;<br><br><span class="hljs-regexp">//</span> show_img.php<br>&lt;?<br>include(<span class="hljs-string">&quot;LIB_mysql.php&quot;</span>);<br><span class="hljs-variable">$image_id</span> = <span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;img_id&#x27;</span>];<br><span class="hljs-variable">$sql</span> = <span class="hljs-string">&quot;select IMAGE from table where IMAGE_ID=&#x27;&quot;</span>.<span class="hljs-variable">$image_id</span>.<span class="hljs-string">&quot;&#x27;&quot;</span>;<br>list(<span class="hljs-variable">$img</span>) = exe_sql(DATABASE, <span class="hljs-variable">$sql</span>);<br>    <br>header(<span class="hljs-string">&quot;Content-type: image/jpeg&quot;</span>);<br>echo base64_decode(<span class="hljs-variable">$img</span>);<br><span class="hljs-keyword">exit</span>;<br>?&gt;<br></code></pre></td></tr></table></figure></li>
+</ol>
+<ul>
+<li>把資料變小一點</li>
+</ul>
+<ol>
+<li>儲存指向資料的參照  </li>
+<li>壓縮資料<br>對傳進來的檔案進行壓縮：<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-regexp">//</span> 送出可接受壓縮檔的請求<br><span class="hljs-variable">$header</span>[] = <span class="hljs-string">&quot;Accept-Encoding:compress, gzip&quot;</span>;<br>curl_setopt(<span class="hljs-variable">$curl_session</span>, CURLOPT_HTTPHEADER, <span class="hljs-variable">$header</span>);<br><br><span class="hljs-regexp">//</span> 對壓縮檔進行解壓縮<br><span class="hljs-variable">$uncompressed_file</span> = gzuncompress(<span class="hljs-variable">$compressed_file</span>);<br></code></pre></td></tr></table></figure></li>
+<li>移除不需要的格式<br>使用strip_tags()移除HTML標籤  </li>
+<li>為大型圖像檔案建立縮圖，或建立比較小的呈現方式</li>
+</ol>
+<ul>
+<li>運用縮圖  <figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs gams"><span class="hljs-comment">//利用LIB_thumbnail函式庫  </span><br><span class="hljs-meta"><span class="hljs-keyword">$org</span>_file = &quot;test.jpg&quot;;</span><br><span class="hljs-meta"><span class="hljs-keyword">$new</span>_file_name = &quot;thumbnail.jpg&quot;;</span><br><span class="hljs-meta"><span class="hljs-keyword">$max</span>_width = 90;</span><br><span class="hljs-meta"><span class="hljs-keyword">$max</span>_height = 90;</span><br>create_thumbnail(<span class="hljs-symbol">$</span>org_file, <span class="hljs-symbol">$</span>new_file_name, <span class="hljs-symbol">$</span>max_width, <span class="hljs-symbol">$</span>max_height);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="Part-II-案例分享"><a href="#Part-II-案例分享" class="headerlink" title="Part II 案例分享"></a>Part II 案例分享</h2><h3 id="Chapter-8-價格監視用網路機器人"><a href="#Chapter-8-價格監視用網路機器人" class="headerlink" title="Chapter 8. 價格監視用網路機器人"></a>Chapter 8. 價格監視用網路機器人</h3><ul>
+<li>設計一個能解析語意的script腳本  </li>
+<li>目標網頁的初始化與下載<br>ref: chapter8_price_monitoring_bot.php</li>
+</ul>
+<h3 id="Chapter-9-圖像擷取用網路機器人"><a href="#Chapter-9-圖像擷取用網路機器人" class="headerlink" title="Chapter 9. 圖像擷取用網路機器人"></a>Chapter 9. 圖像擷取用網路機器人</h3><ul>
+<li>圖像擷取用網路機器人範例<br>相同檔案名稱、不同目錄</li>
+<li>建立圖像擷取用網路機器人<br>ref: chapter9_image_capture_bot.php</li>
+</ul>
+<h3 id="Chapter-10-鏈結查證用網路機器人"><a href="#Chapter-10-鏈結查證用網路機器人" class="headerlink" title="Chapter 10. 鏈結查證用網路機器人"></a>Chapter 10. 鏈結查證用網路機器人</h3><p>無效鏈結的偵測(Link-Verification)  </p>
+<ul>
+<li>建立一個鏈結查證用網路機器人</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>HTTP Code</th>
+<th>類別</th>
+<th>意義</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>100-199</td>
+<td>訊息相關</td>
+<td>一般未使用</td>
+</tr>
+<tr>
+<td>200-299</td>
+<td>成功</td>
+<td>請求成功</td>
+</tr>
+<tr>
+<td>300-399</td>
+<td>重導向</td>
+<td>頁面被移走了</td>
+</tr>
+<tr>
+<td>400-499</td>
+<td>客戶端錯誤</td>
+<td>客戶端發出錯誤請求</td>
+</tr>
+<tr>
+<td>500-599</td>
+<td>伺服器錯誤</td>
+<td>伺服器錯誤</td>
+</tr>
+</tbody></table>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-regexp">//</span> <span class="hljs-variable">$status_code_array</span>於LIB_http_codes同時建立<br><span class="hljs-variable">$status_code_array</span>[<span class="hljs-variable">$download_link</span>[<span class="hljs-string">&#x27;STATUS&#x27;</span>][<span class="hljs-string">&#x27;http_code&#x27;</span>]] <span class="hljs-regexp">//</span> 狀態碼轉文字<br><span class="hljs-variable">$download_link</span>[<span class="hljs-string">&#x27;STATUS&#x27;</span>][<span class="hljs-string">&#x27;http_code&#x27;</span>] <span class="hljs-regexp">//</span> 下載頁面花費時間<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>網路機器人的運行<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-regexp">//</span> LIB_http_codes<br>include(LIB_http_codes.php)<br>echo <span class="hljs-variable">$status_code_array</span>[<span class="hljs-variable">$YOUR_HEEP_CODE</span>][<span class="hljs-string">&#x27;MSG&#x27;</span>];<br><br><span class="hljs-regexp">//</span>LIB_resolve_address<br>resolve_address(<span class="hljs-variable">$link</span>, <span class="hljs-variable">$page_base</span>);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="Chapter-11-搜尋排名用網路機器人"><a href="#Chapter-11-搜尋排名用網路機器人" class="headerlink" title="Chapter 11. 搜尋排名用網路機器人"></a>Chapter 11. 搜尋排名用網路機器人</h3><ul>
+<li>對一個搜尋結果頁面進行描述<br>付費區域&#x2F;組織過的結果(SEO結果)<br>“下一頁”的位置</li>
+<li>搜尋排名用網路機器人的工作方式<br>輸入”關鍵字”與”要找的頁面”，尋找排名結果：頁面.筆數</li>
+<li>搜尋排名用網路機器人的執行</li>
+<li>搜尋排名用網路機器人的工作原理</li>
+</ul>
+<ol>
+<li>變數初始化  </li>
+<li>使用”關鍵字”於搜尋引擎進行搜索  </li>
+<li>跳過網告與導覽文字  </li>
+<li>檢查搜尋頁面是否出現於結果中  </li>
+<li>報告結果</li>
+</ol>
+<ul>
+<li>搜尋排名用網路機器人的script腳本<br>ref: chapter11_search_ranking_bot.php<br>插入解析(insertion parse)：於資料內部插入自定義的tag(如&lt;data&gt;)</li>
+<li>最終想法<br>善待你的資料來源<br>搜尋網站對待網路機器人時，可能與瀏覽器不同<br>讓網路蜘蛛搜刮搜尋引擎的資料，可不是好主意</li>
+<li>進一步的探索</li>
+</ul>
+<h3 id="Chapter-12-彙整用網路機器人"><a href="#Chapter-12-彙整用網路機器人" class="headerlink" title="Chapter 12. 彙整用網路機器人"></a>Chapter 12. 彙整用網路機器人</h3><p>範例應用：Google Map結合房地產資訊，顯示彙整結果頁面  </p>
+<ul>
+<li>為網路機器人選擇資料的來源<br>API或RSS  </li>
+<li>彙整用網路機器人的範例<br>RSS饋送資料的方式  <figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs pgsql">// RSS feed<br>&lt;title&gt;<br>    RSS Feed Title<br>&lt;/title&gt;<br>&lt;link&gt;<br>    www.Link_to_web_page.com<br>&lt;/link&gt;<br>&lt;description&gt;<br>    Description <span class="hljs-keyword">of</span> RSS feed<br>&lt;/description&gt;<br>&lt;copyright&gt;<br>    Copyright <span class="hljs-keyword">notice</span><br>&lt;/copyright&gt;<br>&lt;lastBuildDate&gt;<br>    <span class="hljs-type">Date</span> <span class="hljs-keyword">of</span> RSS <span class="hljs-keyword">publication</span><br>&lt;/lastBuildDate&gt;<br><br>// RSS Item<br>&lt;item&gt;<br>    &lt;title&gt; Title <span class="hljs-keyword">of</span> Item &lt;/title&gt;<br>    &lt;link&gt; URL <span class="hljs-keyword">of</span> associated web page <span class="hljs-keyword">for</span> item &lt;/link&gt;<br>    &lt;description&gt; Description <span class="hljs-keyword">of</span> item &lt;/description&gt;<br>    &lt;pubDate&gt; <span class="hljs-keyword">Publication</span> <span class="hljs-type">date</span> <span class="hljs-keyword">of</span> item &lt;/pubDate&gt;<br>&lt;/item&gt;<br></code></pre></td></tr></table></figure></li>
+</ul>
+<p>ref: chapter12_aggregation_bot.php<br>CDATA: XML用CDATA標籤來識別不應該被解釋為XML的標籤<br>&lt;![[…文字…]]&gt;</p>
+<ul>
+<li>在你的彙整用網路機器人中加入篩選的功能  </li>
+<li>進一步的探索</li>
+</ul>
+<h3 id="Chapter-13-FTP網路機器人"><a href="#Chapter-13-FTP網路機器人" class="headerlink" title="Chapter 13. FTP網路機器人"></a>Chapter 13. FTP網路機器人</h3><ul>
+<li>FTP網路機器人範例<br>ref: chapter13_ftp_bot.php  </li>
+<li>PHP與FTP<br>PHP支援的一般FTP指令</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>FTP函式($ftp：FTP File Stream)</th>
+<th>用法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ftp_cdup($ftp)</td>
+<td>使附目錄變成目前的目錄</td>
+</tr>
+<tr>
+<td>ftp_chdir($ftp, “directory&#x2F;path”)</td>
+<td>改變目前的目錄</td>
+</tr>
+<tr>
+<td>ftp_delete($ftp, “filename”)</td>
+<td>刪除某個檔案</td>
+</tr>
+<tr>
+<td>ftp_get($ftp, “local file”, “remote file”, MODE)</td>
+<td>將遠端的檔案拷貝到本機檔案，MODE: FTP_ASCII&#x2F;FTP_BINARY</td>
+</tr>
+<tr>
+<td>ftp_mkdir($ftp, “directory name”)</td>
+<td>建立一個新的目錄</td>
+</tr>
+<tr>
+<td>ftp_rename($ftp, “file name”)</td>
+<td>在FTP伺服器上更改檔案或目錄名稱</td>
+</tr>
+<tr>
+<td>ftp_put($ftp, “remote file”, “local file”, MODE)</td>
+<td>將本機的檔案拷貝至遠端的檔案，MODE: FTP_ASCII&#x2F;FTP_BINARY</td>
+</tr>
+<tr>
+<td>ftp_rmdir($ftp, “directory&#x2F;path”)</td>
+<td>移除一個目錄</td>
+</tr>
+<tr>
+<td>ftp_rawlist($ftp, “directory&#x2F;path”)</td>
+<td>送回一個陣列，元素為檔案訊息</td>
+</tr>
+</tbody></table>
+<ul>
+<li>進一步的探索</li>
+</ul>
+<h3 id="Chapter-14-能讀取電子郵件的網路機器人"><a href="#Chapter-14-能讀取電子郵件的網路機器人" class="headerlink" title="Chapter 14. 能讀取電子郵件的網路機器人"></a>Chapter 14. 能讀取電子郵件的網路機器人</h3><ul>
+<li>POP3協定<br>利用telnet登入POP3郵件伺服器<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus">telnet mail<span class="hljs-selector-class">.server</span><span class="hljs-selector-class">.net</span> <span class="hljs-number">110</span><br></code></pre></td></tr></table></figure>
+讀取郵件：</li>
+</ul>
+<ol>
+<li>LIST指令取得編號  </li>
+<li>RETR &lt;編號&gt;：讀取內容<br>刪除郵件：  </li>
+<li>DELE &lt;編號&gt;  </li>
+<li>QUIT &#x2F;&#x2F;執行後才真正刪除<br>RSET &lt;編號&gt;：QUIT前可還原刪除動作</li>
+</ol>
+<ul>
+<li><p>利用網路機器人來執行POP3協定<br>利用PHP的opensocket()、fputs()和fgets()執行POP3指令<br>ref. chapter14_email_reading_bot.php</p>
+</li>
+<li><p>進一步的探索<br>不相容系統之間的介面：發送檔案至mailbox讓機器人讀取後處理</p>
+</li>
+</ul>
+<h3 id="Chapter-15-能發送電子郵件的網路機器人"><a href="#Chapter-15-能發送電子郵件的網路機器人" class="headerlink" title="Chapter 15. 能發送電子郵件的網路機器人"></a>Chapter 15. 能發送電子郵件的網路機器人</h3><ul>
+<li>電子郵件、網路機器人與垃圾郵件<br>避免成為垃圾郵件指導原則：</li>
+</ul>
+<ol>
+<li>允許收件人取消訂閱  </li>
+<li>避免多個重複的郵件  </li>
+<li>使用恰當的標題  </li>
+<li>表明你自己的身份  </li>
+<li>遵守法律規定</li>
+</ol>
+<ul>
+<li>利用SMTP與PHP來發送郵件<br>編輯php.ini配置檔<br>關閉郵件伺服器的中繼傳輸(relay host)功能，避免成為垃圾郵件跳板<br>PHP的mail()函式  <figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs perl">$email_address = <span class="hljs-string">&quot;account@someserver.com&quot;</span>;<br>$email_subject = <span class="hljs-string">&quot;SUBJECT&quot;</span>;<br>$email_message = <span class="hljs-string">&quot;MESSAGE&quot;</span>;<br>mail($email_address, $email_subject, $email_message);<br></code></pre></td></tr></table></figure>
+利用LIB_mail發送格式化的郵件</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>LIB_mail地址種類</th>
+<th>功能</th>
+<th>必要或選擇</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>To</td>
+<td>主要收件人地址</td>
+<td>必要</td>
+</tr>
+<tr>
+<td>Reply-to</td>
+<td>回覆地址</td>
+<td>選擇</td>
+</tr>
+<tr>
+<td>Return-path</td>
+<td>無法傳送時，通知地址</td>
+<td>選擇</td>
+</tr>
+<tr>
+<td>From</td>
+<td>寄件人地址</td>
+<td>必要</td>
+</tr>
+<tr>
+<td>Cc</td>
+<td>其他收件人</td>
+<td>選擇</td>
+</tr>
+<tr>
+<td>Bcc</td>
+<td>密件副本</td>
+<td>選擇</td>
+</tr>
+</tbody></table>
+<ul>
+<li>編寫一個能發送電子郵件通知的網路機器人<br>網頁內容變化時，發送電子郵件的網路機器人：<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-keyword">include</span>(<span class="hljs-string">&quot;LIB_http.php&quot;</span>);<br><span class="hljs-keyword">include</span>(<span class="hljs-string">&quot;LIB_mysql.php&quot;</span>);<br><span class="hljs-keyword">include</span>(<span class="hljs-string">&quot;LIB_mail.php&quot;</span>);<br><br><span class="hljs-variable">$webbot_email_address</span> = <span class="hljs-string">&quot;mail@server.com&quot;</span>;<br><span class="hljs-variable">$notification_email_address</span> = <span class="hljs-string">&quot;mail@server.com&quot;</span>;<br><span class="hljs-variable">$target_web_site</span> = <span class="hljs-string">&quot;www.website.com&quot;</span>;<br><br><span class="hljs-variable">$download_array</span> = <span class="hljs-title function_ invoke__">http_get</span>(<span class="hljs-variable">$target_web_site</span>, <span class="hljs-variable">$ref</span>=<span class="hljs-string">&quot;&quot;</span>);<br><span class="hljs-variable">$web_page</span> = <span class="hljs-variable">$download_array</span>[<span class="hljs-string">&#x27;FILE&#x27;</span>];<br><br><span class="hljs-variable">$new_signature</span> = <span class="hljs-title function_ invoke__">sha1</span>(<span class="hljs-variable">$web_page</span>);<br><br><span class="hljs-variable">$sql</span> = <span class="hljs-string">&quot;select SIGNATURE from signatures where WEB_PAGE=&#x27;&quot;</span>.<span class="hljs-variable">$target_web_site</span><span class="hljs-string">&quot;&#x27;&quot;</span>;<br><span class="hljs-keyword">list</span>(<span class="hljs-variable">$old_signature</span>) = <span class="hljs-title function_ invoke__">exe_sql</span>(DATABASE, <span class="hljs-variable">$sql</span>);<br><br><span class="hljs-keyword">if</span>(<span class="hljs-variable">$new_signature</span> != <span class="hljs-variable">$old_signature</span>)&#123;<br>    <span class="hljs-keyword">if</span>(<span class="hljs-keyword">isset</span>(<span class="hljs-variable">$data_array</span>)) <span class="hljs-keyword">unset</span>(<span class="hljs-variable">$data_signature</span>);<br>    <span class="hljs-variable">$data_array</span>[<span class="hljs-string">&#x27;SIGNATURE&#x27;</span>] = <span class="hljs-variable">$new_signature</span>;<br>    <span class="hljs-title function_ invoke__">update</span>(DATABASE, <span class="hljs-variable">$table</span>=<span class="hljs-string">&quot;signatures&quot;</span>, <span class="hljs-variable">$data_array</span>, <span class="hljs-variable">$key_column</span>=<span class="hljs-string">&quot;WEB_PAGE&quot;</span>, <span class="hljs-variable">$id</span>=<span class="hljs-variable">$target_web_site</span>);<br><br>    <span class="hljs-variable">$subject</span> = <span class="hljs-variable">$target_web_site</span>.<span class="hljs-string">&quot;內容改變&quot;</span>;<br>    <span class="hljs-variable">$message</span> = <span class="hljs-variable">$subject</span>.<span class="hljs-string">&quot;\n&quot;</span>;<br>    ...<br>    <span class="hljs-variable">$address</span>[<span class="hljs-string">&#x27;from&#x27;</span>] = <span class="hljs-variable">$webbot_email_address</span>;<br>    <span class="hljs-variable">$address</span>[<span class="hljs-string">&#x27;replayto&#x27;</span>] = <span class="hljs-variable">$webbot_email_address</span>;<br>    <span class="hljs-variable">$address</span>[<span class="hljs-string">&#x27;to&#x27;</span>] = <span class="hljs-variable">$notification_email_address</span>;<br>    <span class="hljs-title function_ invoke__">formatted_mail</span>(<span class="hljs-variable">$subject</span>, <span class="hljs-variable">$message</span>, <span class="hljs-variable">$address</span>, <span class="hljs-variable">$content_type</span>=<span class="hljs-string">&quot;text/plain&quot;</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+<strong>別讓垃圾郵件篩選程式，篩選掉合法郵件</strong><br>確保from與reply-to是相同網域<br><strong>發送HTML格式化的電子郵件</strong></li>
+</ul>
+<ol>
+<li>利用formatted_mail()函式  </li>
+<li>設定$content_type為text&#x2F;html  </li>
+<li>使用完整形式的URL  </li>
+<li>使用標準格式技術(如：table)  </li>
+<li>避免使用CSS  </li>
+<li>將訊息建立成一個字串</li>
+</ol>
+<ul>
+<li>進一步的探索</li>
+</ul>
+<h3 id="Chapter-16-將某個網站功能轉換成函式"><a href="#Chapter-16-將某個網站功能轉換成函式" class="headerlink" title="Chapter 16. 將某個網站功能轉換成函式"></a>Chapter 16. 將某個網站功能轉換成函式</h3><ul>
+<li>撰寫一個函式的介面<br>提交郵遞區號，回傳詳細資訊<br>ref. chapter16_website_to_function_bot.php  </li>
+<li>最終的想法</li>
+</ul>
+<ol>
+<li>分配資源：利用多台伺服器的資源  </li>
+<li>使用標準介面：跨平台的能力  </li>
+<li>設計一個自訂的輕量級”網路服務”</li>
+</ol>
+<h2 id="Part-III-進階技術的相關考量"><a href="#Part-III-進階技術的相關考量" class="headerlink" title="Part III 進階技術的相關考量"></a>Part III 進階技術的相關考量</h2><h3 id="Chapter-17-網路蜘蛛"><a href="#Chapter-17-網路蜘蛛" class="headerlink" title="Chapter 17. 網路蜘蛛"></a>Chapter 17. 網路蜘蛛</h3><p>網路蜘蛛: Spider, web spider, crawlers, web walker</p>
+<ul>
+<li><p>網路蜘蛛的工作原理<br>seed URL 抓取第一個頁面(第一滲透層the first penetration level)，重複抓取直到最大滲透層</p>
+</li>
+<li><p>網路蜘蛛的範例<br>ref. chapter17_simple_spider.php  </p>
+</li>
+<li><p>LIB_simple_spider<br>harvest_links($url):下載指定的網頁，回傳link array<br>archive_links($spider_array, $penetration_level, $temp_link_array):標記level與排除exclusion_list中的url<br>get_domain($url):抓取根網域<br>exclude_link($spider_array, $link):排除不需要的鏈結  </p>
+</li>
+<li><p>利用網路蜘蛛進行一些實驗<br>三個警告：</p>
+</li>
+</ul>
+<ol>
+<li>$FETCH_DELAY至少設定1~2秒以避免DoS  </li>
+<li>滲透層的最大值保持1或2避免記憶體用盡  </li>
+<li>使用terminal進行，不要透過瀏覽器</li>
+</ol>
+<ul>
+<li><p>加上負載程式<br>實際要執行的程式內容</p>
+</li>
+<li><p>進一步的探索</p>
+</li>
+</ul>
+<ol>
+<li>將鏈結儲存到資料庫中  </li>
+<li>將取得鏈結的程式，與負載程式區隔開來  </li>
+<li>利用多部電腦分散工作  </li>
+<li>規範管理頁面請求</li>
+</ol>
+<h3 id="Chapter-18-採購用網路機器人與狙擊程式"><a href="#Chapter-18-採購用網路機器人與狙擊程式" class="headerlink" title="Chapter 18. 採購用網路機器人與狙擊程式"></a>Chapter 18. 採購用網路機器人與狙擊程式</h3><ul>
+<li>採購用網路機器人理論<br>流程：<br>取得採購商品的條件 -&gt; 買家身份認證 -&gt; 對採購項目進行確認<br>-&gt; 價格可接受嗎？&#x2F;庫存有需求嗎？&#x2F;非買不可嗎？ -&gt; 進行採購<br>-&gt; 評估結果 -&gt; 完成                          </li>
+<li>狙擊程式(Sniper)理論<br>利用時間作為觸發事件的機器人<br>流程：<br>取得採購商品的條件 -&gt; 買家身份認證 -&gt; 對採購項目進行確認<br>-&gt; 時鐘同步 -&gt; 出價的時間點到了嗎？ -&gt; 送出你的報價<br>-&gt; 評估結果 -&gt; 完成</li>
+</ul>
+<p>取得伺服器時間設定：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-keyword">include</span>(<span class="hljs-string">&quot;LIB_http.php&quot;</span>);<br><span class="hljs-keyword">include</span>(<span class="hljs-string">&quot;LIB_parse.php&quot;</span>);<br><br><span class="hljs-variable">$target</span> = <span class="hljs-string">&quot;http://www.schrenk.com&quot;</span>;<br><br><span class="hljs-variable">$header_array</span> = <span class="hljs-title function_ invoke__">http_header</span>(<span class="hljs-variable">$target</span>, <span class="hljs-variable">$ref</span>=<span class="hljs-string">&quot;&quot;</span>);<br><br><span class="hljs-variable">$local_server_time</span> = <span class="hljs-title function_ invoke__">return_between</span>(<span class="hljs-variable">$header_array</span>[<span class="hljs-string">&#x27;FILE&#x27;</span>], <span class="hljs-variable">$start</span>=<span class="hljs-string">&quot;Date:&quot;</span>, <span class="hljs-variable">$stop</span>=<span class="hljs-string">&quot;\n&quot;</span>, EXCL);<br><span class="hljs-variable">$local_server_time_ts</span> = <span class="hljs-title function_ invoke__">strtotime</span>(<span class="hljs-variable">$local_server_time</span>);<br><br><span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;\nReturned header:\n&quot;</span>;<br><span class="hljs-keyword">echo</span> <span class="hljs-variable">$header_array</span>[<span class="hljs-string">&#x27;FILE&#x27;</span>].<span class="hljs-string">&quot;\n&quot;</span>;<br><span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;Parsed server timestamp = &quot;</span>.<span class="hljs-variable">$local_server_time_ts</span>.<span class="hljs-string">&quot;\n&quot;</span>;<br><span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;Formatted server time = &quot;</span>.<span class="hljs-title function_ invoke__">date</span>(<span class="hljs-string">&quot;r&quot;</span>, <span class="hljs-variable">$local_server_time_ts</span>).<span class="hljs-string">&quot;\n&quot;</span>;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>對你自己的網路機器人與狙擊程式進行測試  </li>
+<li>進一步的探索</li>
+<li>最終的想法</li>
+</ul>
+<h3 id="Chapter-19-網路機器人與密碼術"><a href="#Chapter-19-網路機器人與密碼術" class="headerlink" title="Chapter 19. 網路機器人與密碼術"></a>Chapter 19. 網路機器人與密碼術</h3><ul>
+<li>設計一個能使用加密功能的網路機器人<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-function"><span class="hljs-title">http_get</span><span class="hljs-params">(<span class="hljs-string">&quot;https://...&quot;</span>, <span class="hljs-variable">$referer</span>)</span></span><br></code></pre></td></tr></table></figure></li>
+<li>對Web網路加密的快速綜覽<br>handshake過程確認使用的加密演算法，客戶端取得伺服器端回傳的CA(Certificate authority)、公鑰等資訊，客戶端使用公鑰進行加密回傳，伺服器利用回傳的訊息建立session憑證。</li>
+</ul>
+<p>忽略認證動作：</p>
+<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs arcade">curl_setopt(<span class="hljs-symbol">$c</span>h, CURLOPT_SSL_VERIFIYHOST, <span class="hljs-literal">FALSE</span>);<br>curl_setopt(<span class="hljs-symbol">$c</span>h, CURLOPT_SSL_VERIFYPEER, <span class="hljs-literal">FALSE</span>);<br></code></pre></td></tr></table></figure>
+
+<p>設定認證動作：</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">curl<span class="hljs-constructor">_setopt($<span class="hljs-params">ch</span>, CURLOPT_SSL_VERIFYPEER, TRUE)</span>;<br>curl<span class="hljs-constructor">_setopt($<span class="hljs-params">ch</span>, CURLOPT_CAINFO, $<span class="hljs-params">file_name</span>)</span>; <span class="hljs-comment">//憑證檔案</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>最終的想法<br>使用正確的協定，表單action有可能為http&#x2F;https，</li>
+</ul>
+<h3 id="Chapter-20-身份證認"><a href="#Chapter-20-身份證認" class="headerlink" title="Chapter 20. 身份證認"></a>Chapter 20. 身份證認</h3><ul>
+<li><p>身份認證是什麼？<br>證明你是誰的過程</p>
+</li>
+<li><p>script腳本範例與練習網頁<br>練習網頁：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>身份認證方法</th>
+<th>練習網頁的位置</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>基本身份認證</td>
+<td><a target="_blank" rel="noopener" href="http://www.webbotsspidersscreenscrapers.com/basic_authentication">http://www.WebbotsSpidersScreenScrapers.com/basic_authentication</a></td>
+</tr>
+<tr>
+<td>Cookies Sessions</td>
+<td><a target="_blank" rel="noopener" href="http://www.webbotsspidersscreenscrapers.com/cookie_authentication">http://www.webbotsspidersscreenscrapers.com/cookie_authentication</a></td>
+</tr>
+<tr>
+<td>Query Sessions</td>
+<td><a target="_blank" rel="noopener" href="http://www.webbotsspidersscreenscrapers.com/query_authentication">http://www.webbotsspidersscreenscrapers.com/query_authentication</a></td>
+</tr>
+</tbody></table>
+<p>帳號密碼：webbot &#x2F; sp1der3</p>
+<ul>
+<li><p>基本身份認證<br>realm(領域)：受保護的範圍，一般來說為當前的伺服器目錄，以及子目錄下的所有網頁。<br>基本身份證認的缺點：<br>除了關閉瀏覽器，沒有其他登出的方法。<br>表單外觀無法改變(根據瀏覽器實作)。<br>明碼傳送資訊，安全性低。(可透過digest authentication補強，加入128-bits MD5，但支援度低)。<br>ref. chapter20-1_basic_authentication.php</p>
+</li>
+<li><p>session認證<br>兩種方法：cookie與query string</p>
+</li>
+</ul>
+<p><strong>Cookie Session進行身份認證</strong><br>Cookie的工作原理：<br>cookie於HTTP header中，當client端向server端發出請求時，檢查cookie值是否正確。<br>若不正確則伺服器向使用者要求憑證並將session值保存於cookie中。<br>ref. chapter20-2_cookie_session_authentication.php</p>
+<p><strong>以Query Session進行身份認證</strong><br>有些瀏覽器限制cookie使用。<br>ref. chapter20-3_query_session_authentication.php</p>
+<ul>
+<li>最終的想法<br>需要搭配加密傳輸。<br>留意登入條件不要隨意散播，防止留下紀錄。<br>網站可能結合多種認證，確認所有認證方案。</li>
+</ul>
+<h3 id="Chapter-21-進階的Cookie管理"><a href="#Chapter-21-進階的Cookie管理" class="headerlink" title="Chapter 21. 進階的Cookie管理"></a>Chapter 21. 進階的Cookie管理</h3><ul>
+<li>Cookie的工作原理<br>網際網路為無狀態(stateless)環境<br>Cookie兩種類型：</li>
+</ul>
+<ol>
+<li>臨時性(temporary)  </li>
+<li>持久性(Permanent)  <figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs lisp">setcookie(<span class="hljs-string">&quot;TemporaryCookie&quot;</span>, <span class="hljs-string">&quot;66&quot;</span>)<span class="hljs-comment">;</span><br>setcookie(<span class="hljs-string">&quot;PermanentCookie&quot;</span>, <span class="hljs-string">&quot;88&quot;</span>, time()<span class="hljs-number">+3600</span>)<span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure>
+透過Http Header傳送cookie</li>
+</ol>
+<ul>
+<li><p>PHP&#x2F;CURL和Cookie  </p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-regexp">//</span>讀取cookie<br>include(<span class="hljs-string">&quot;LIB_http.php&quot;</span>); <span class="hljs-regexp">//</span>define(<span class="hljs-string">&quot;COOKIE_FILE&quot;</span>, <span class="hljs-string">&quot;c:\cookie.txt&quot;</span>);<br><span class="hljs-variable">$target</span>=<span class="hljs-string">&quot;http://www.WebbotSpidersScreenSrapers.com/Listing_21_1.php&quot;</span><br>http_get(<span class="hljs-variable">$target</span>, <span class="hljs-string">&quot;&quot;</span>);<br></code></pre></td></tr></table></figure>
+<p>不同瀏覽器維護自定義的cookie結構，瀏覽器間的cookie不相容。  </p>
+</li>
+<li><p>Cookie對網路機器人設計帶來了什麼挑戰？<br>cookie可以由使用者關閉，非強制項目。<br>在cookie傳遞的資料與Get&#x2F;Post傳遞的內容一樣重要。<br><strong>清除臨時性Cookie</strong><br>PHP&#x2F;CURL將cookie寫入檔案，需要自行檢查是否過期。<br>或者設定下列屬性：  </p>
+<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arcade">curl_setopt(<span class="hljs-symbol">$s</span>, CURLOPT_COOKIESESSION, <span class="hljs-literal">TRUE</span>);<br></code></pre></td></tr></table></figure></li>
+</ul>
+<p><strong>管理多使用者的Cookie</strong></p>
+<figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs gams"><span class="hljs-meta"><span class="hljs-keyword">$s</span> = curl_init();</span><br><br><span class="hljs-meta"><span class="hljs-keyword">$cookie</span>_file = &quot;c:\bots\&quot;.$username.&quot;cookies.txt&quot;;</span><br>curl_setopt(<span class="hljs-symbol">$</span>s, CURLOPT_COOKIEFILE, <span class="hljs-symbol">$</span>cookie_file); <span class="hljs-comment">//讀取</span><br>curl_setopt(<span class="hljs-symbol">$</span>s, CURLOPT_COOKIEJAR, <span class="hljs-symbol">$</span>cookie_file); <span class="hljs-comment">//寫入</span><br><br>curl_setopt(<span class="hljs-symbol">$</span>s, CURLOPT_URL, <span class="hljs-symbol">$</span>target);<br>curl_setopt(<span class="hljs-symbol">$</span>s, CURLOPT_RETURNTRANSFER, TURE); <span class="hljs-comment">//以字串傳送</span><br><br>culr_setopt(<span class="hljs-symbol">$</span>s, CURLOPT_SSL_VERIFYPEER, FALSE);<br>culr_setopt(<span class="hljs-symbol">$</span>s, CURLOPT_FOLLOWLOCATION, TURE);<br>culr_setopt(<span class="hljs-symbol">$</span>s, CURLOPT_MAXREDIRS, <span class="hljs-number">4</span>);<br><br><span class="hljs-meta"><span class="hljs-keyword">$downloaded</span>_page = curl_exec($s);</span><br>curl_close(<span class="hljs-symbol">$</span>s);<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>進一步的探索</li>
+</ul>
+<ol>
+<li>設計可讀取header的script，增加cookie管理能力。  </li>
+<li>若無法在運行伺服器上寫入檔案，可以寫入DB。  </li>
+<li>自動刪除臨時性cookie的script。  </li>
+<li>透過瀏覽器巨集自動管理cookie。</li>
+</ol>
+<h3 id="Chapter-22-網路機器人與網路蜘蛛排程"><a href="#Chapter-22-網路機器人與網路蜘蛛排程" class="headerlink" title="Chapter 22. 網路機器人與網路蜘蛛排程"></a>Chapter 22. 網路機器人與網路蜘蛛排程</h3><ul>
+<li>為網路機器人排程，做好準備工作<br>使用批次檔  </li>
+<li>Windows XP工作排程器<br>系統工具&gt;工作排程器  </li>
+<li>Windows 7工作排程器<br>控制台&gt;工作排程器  </li>
+<li>不以日曆為基礎的觸發方式<br>使用e-mail進行觸發  <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-keyword">include</span>(<span class="hljs-string">&quot;LIB_pop3.php&quot;</span>);<br><span class="hljs-title function_ invoke__">define</span>(<span class="hljs-string">&quot;SERVER&quot;</span>, <span class="hljs-string">&quot;your.mailserver.net&quot;</span>);<br><span class="hljs-title function_ invoke__">define</span>(<span class="hljs-string">&quot;USER&quot;</span>, <span class="hljs-string">&quot;your@email.com&quot;</span>);<br><span class="hljs-title function_ invoke__">define</span>(<span class="hljs-string">&quot;PASS&quot;</span>, <span class="hljs-string">&quot;your_passeord&quot;</span>);<br><span class="hljs-variable">$webbot_path</span> = <span class="hljs-string">&quot;C:\\webbots\\view_competitor.bat&quot;</span>;<br><br><span class="hljs-variable">$connection_array</span> = <span class="hljs-title function_ invoke__">POP3_connect</span>(SERVER, USER, PASS);<br><span class="hljs-variable">$POP3_connection</span> = <span class="hljs-variable">$connection_array</span>[<span class="hljs-string">&#x27;handle&#x27;</span>];<br><br><span class="hljs-keyword">if</span>(<span class="hljs-variable">$POP3_connection</span>)&#123;<br>  <span class="hljs-variable">$email_array</span> = <span class="hljs-title function_ invoke__">POP3_list</span>(<span class="hljs-variable">$POP3_connection</span>);<br>  <span class="hljs-keyword">for</span>(<span class="hljs-variable">$xx</span>=<span class="hljs-number">0</span>; <span class="hljs-variable">$xx</span>&lt;<span class="hljs-title function_ invoke__">count</span>(<span class="hljs-variable">$email_array</span>); <span class="hljs-variable">$xx</span>++)&#123;<br>    <span class="hljs-keyword">list</span>(<span class="hljs-variable">$mail_id</span>, <span class="hljs-variable">$size</span>) = <span class="hljs-title function_ invoke__">expode</span>(<span class="hljs-string">&quot; &quot;</span>, <span class="hljs-variable">$email_array</span>[<span class="hljs-variable">$xx</span>]);<br>    <span class="hljs-variable">$message</span> = <span class="hljs-title function_ invoke__">POP3_retr</span>(<span class="hljs-variable">$POP3_connection</span>, <span class="hljs-variable">$mail_id</span>);<br><br>    <span class="hljs-keyword">if</span>(<span class="hljs-title function_ invoke__">stristr</span>(<span class="hljs-variable">$message</span>, <span class="hljs-string">&quot;Subject: Run the webbot&quot;</span>))&#123;<br>        <span class="hljs-variable">$output</span> = <span class="hljs-title function_ invoke__">shell_exec</span>(<span class="hljs-variable">$webbot_path</span>);<br>        <span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;&lt;pre&gt;<span class="hljs-subst">$output</span>&lt;/pre&gt;&quot;</span>;<br>        <span class="hljs-title function_ invoke__">POP3_delete</span>(<span class="hljs-variable">$POP3_connection</span>, <span class="hljs-variable">$mail_id</span>);<br>    &#125;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li>最終的想法</li>
+</ul>
+<ol>
+<li>為機器人訂出最恰當的執行週期  </li>
+<li>避免單點故障  </li>
+<li>增加排成變化的多樣性</li>
+</ol>
+<h3 id="Chapter-23-使用瀏覽器巨集擷取難度較高的網站"><a href="#Chapter-23-使用瀏覽器巨集擷取難度較高的網站" class="headerlink" title="Chapter 23. 使用瀏覽器巨集擷取難度較高的網站"></a>Chapter 23. 使用瀏覽器巨集擷取難度較高的網站</h3><p>AJAX前，微軟的ActiveX落實XMLHTTP應用，搭配DHTML可提供毋須更新頁面的內容更新。<br>2006年W3C建立AJAX官方標準  </p>
+<ul>
+<li>有效擷取網站資料時所遇到的障礙</li>
+</ul>
+<p>AJAX：URL與內容不再是一對一關係。<br>可能難以達到以下工作：  </p>
+<ol>
+<li>將滑鼠游標移到某個日曆上，然後選定一個日期  </li>
+<li>捲動圖像側邊欄，選定某個特定的縮圖  </li>
+<li>用拖放的方式選擇某個物件  </li>
+<li>緩慢的輸入文字到文字框中，等待拼字檢查器給我們拼字的建議</li>
+</ol>
+<p>怪異的JavaScript和Cookie行為：某些情況下，網頁利用JavaScript建立另一個JavaScript，最終被用來寫入cookie或是控制表單行為。或者網頁會將圖像寫入cookie。</p>
+<p>Flash：內部為封閉的環境</p>
+<ul>
+<li>運用瀏覽器巨集，克服網路資料擷取的障礙<br>使用script腳本來控制瀏覽器的動作。<br>iMacros瀏覽器巨集：<br>建議指令<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs stata">&#x27; 註解的寫法<br><span class="hljs-keyword">SET</span> !TIMEOUT 240<br><span class="hljs-keyword">SET</span> !ERRORIGNORE YES <span class="hljs-comment">//忽略錯誤訊息</span><br><span class="hljs-keyword">SET</span> !EXTRACT_TEST_POPUP <span class="hljs-keyword">NO</span><br>FILTER <span class="hljs-keyword">TYPE</span>=IMAGES STATUS=<span class="hljs-keyword">ON</span><br><span class="hljs-keyword">CLEAR</span><br><span class="hljs-keyword">TAB</span> T=1<br><span class="hljs-keyword">TAB</span> CLOSEALLOTHERS<br></code></pre></td></tr></table></figure></li>
+<li>最終的想法</li>
+</ul>
+<h3 id="Chapter-24-深度應用iMacros"><a href="#Chapter-24-深度應用iMacros" class="headerlink" title="Chapter 24. 深度應用iMacros"></a>Chapter 24. 深度應用iMacros</h3><ul>
+<li>深入到iMacros中，添加額外的功能<br>寫一個script動態建立瀏覽器巨集<br>利用iMacros載入本地端網站伺服器網頁</li>
+</ul>
+<p><strong>不使用iMacors腳本引擎(付費版)的原因：</strong><br>此腳本以COM為基礎，跨平台性較差<br>雖然可以接受本機檔案，但與資料庫或其他網站的外部資料無發搭配很好<br>並沒有其他好處</p>
+<p><strong>建立動態巨集</strong><br>範例：競品價格追蹤  </p>
+<ol>
+<li>使用iMacors和動態巨集，寫一個能模擬實際瀏覽器使用者的網路機器人。</li>
+<li>開發一個能讀取內部資料庫的PHP script腳本，找出銷售最佳的前100項商品，然後寫出一個合適的巨集，取得這些商品在競爭者那邊所賣的價格。</li>
+<li>寫個能從競爭者網頁中解析出價格的PHP script腳本。</li>
+</ol>
+<p>寫一個能建立動態巨集的script腳本</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs swift"><span class="hljs-variable">$macro</span><span class="hljs-operator">=</span><span class="hljs-string">&quot;&quot;</span>;<br><span class="hljs-variable">$macro</span><span class="hljs-operator">=</span><span class="hljs-variable">$macro</span>.<span class="hljs-string">&quot;&#x27;#####################<span class="hljs-subst">\n</span>&quot;</span>;<br><span class="hljs-variable">$macro</span><span class="hljs-operator">=</span><span class="hljs-variable">$macro</span>.<span class="hljs-string">&quot;&#x27;# HEADER (defaults, etc.)<span class="hljs-subst">\n</span>&quot;</span>;<br><span class="hljs-variable">$macro</span><span class="hljs-operator">=</span><span class="hljs-variable">$macro</span>.<span class="hljs-string">&quot;&#x27;#####################<span class="hljs-subst">\n</span>&quot;</span>;<br><span class="hljs-variable">$macro</span><span class="hljs-operator">=</span><span class="hljs-variable">$macro</span>.<span class="hljs-string">&quot;SET !TIMEOUT 240<span class="hljs-subst">\n</span>&quot;</span>;<br><span class="hljs-variable">$macro</span><span class="hljs-operator">=</span><span class="hljs-variable">$macro</span>.<span class="hljs-string">&quot;SET !ERRORIGNORE YES<span class="hljs-subst">\n</span>&quot;</span>;<br><span class="hljs-variable">$macro</span><span class="hljs-operator">=</span><span class="hljs-variable">$macro</span>.<span class="hljs-string">&quot;SET !EXTRACT_TEST_POPUP NO<span class="hljs-subst">\n</span>&quot;</span>;<br><span class="hljs-variable">$macro</span><span class="hljs-operator">=</span><span class="hljs-variable">$macro</span>.<span class="hljs-string">&quot;FILTER TYPE=IMAGES STATUS=ON<span class="hljs-subst">\n</span>&quot;</span>;<br><span class="hljs-variable">$macro</span><span class="hljs-operator">=</span><span class="hljs-variable">$macro</span>.<span class="hljs-string">&quot;CLEAR<span class="hljs-subst">\n</span>&quot;</span>;<br><span class="hljs-variable">$macro</span><span class="hljs-operator">=</span><span class="hljs-variable">$macro</span>.<span class="hljs-string">&quot;TABT= 1<span class="hljs-subst">\n</span>&quot;</span>;<br><span class="hljs-variable">$macro</span><span class="hljs-operator">=</span><span class="hljs-variable">$macro</span>.<span class="hljs-string">&quot;TAB CLOSEALLOTHERS<span class="hljs-subst">\n</span>&quot;</span>;<br><span class="hljs-variable">$macro</span><span class="hljs-operator">=</span><span class="hljs-variable">$macro</span>.<span class="hljs-string">&quot;&#x27;#####################<span class="hljs-subst">\n</span>&quot;</span>;<br></code></pre></td></tr></table></figure>
+
+<p>將外部資料整合到動態建立的巨集中</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs swift"><span class="hljs-keyword">for</span>(<span class="hljs-variable">$xx</span><span class="hljs-operator">=</span><span class="hljs-number">0</span>; <span class="hljs-variable">$xx</span><span class="hljs-operator">&lt;</span>count(<span class="hljs-variable">$product_array</span>); <span class="hljs-variable">$xx</span><span class="hljs-operator">++</span>)&#123;<br>  <span class="hljs-variable">$macro</span> <span class="hljs-operator">=</span> <span class="hljs-variable">$macro</span>.<span class="hljs-string">&quot;&#x27; Get URL of competitor&#x27;s product page<span class="hljs-subst">\n</span>&quot;</span>;<br>  <span class="hljs-variable">$competing_product_information</span> <span class="hljs-operator">=</span> <span class="hljs-comment">//URL</span><br>  <span class="hljs-variable">$macro</span> <span class="hljs-operator">=</span> <span class="hljs-variable">$macro</span>.<span class="hljs-string">&quot;&#x27;<span class="hljs-subst">\n</span>&quot;</span>;<br>  <span class="hljs-variable">$macro</span> <span class="hljs-operator">=</span> <span class="hljs-variable">$macro</span>.<span class="hljs-string">&quot;&#x27;Add random delay<span class="hljs-subst">\n</span>&quot;</span>;<br>  <span class="hljs-variable">$macro</span> <span class="hljs-operator">=</span> <span class="hljs-variable">$macro</span>.<span class="hljs-string">&quot;WAIT SECONDS=&quot;</span>.sleep(rand(<span class="hljs-number">5</span>,<span class="hljs-number">15</span>)).<span class="hljs-string">&quot;<span class="hljs-subst">\n</span>&quot;</span>;<br>  <span class="hljs-variable">$macro</span> <span class="hljs-operator">=</span> <span class="hljs-variable">$macro</span>.<span class="hljs-string">&quot;&#x27;<span class="hljs-subst">\n</span>&quot;</span><br>  <span class="hljs-variable">$macro</span> <span class="hljs-operator">=</span> <span class="hljs-variable">$macro</span>.<span class="hljs-string">&quot;&#x27; Capture the competitor&#x27;s web page with product information<span class="hljs-subst">\n</span>&quot;</span>;<br>  <span class="hljs-variable">$macro</span> <span class="hljs-operator">=</span> <span class="hljs-variable">$macro</span>.<span class="hljs-string">&quot;GOTO URL=$competitor_product_information <span class="hljs-subst">\n</span>&quot;</span>;<br>  <span class="hljs-variable">$macro</span> <span class="hljs-operator">=</span> <span class="hljs-variable">$macro</span>.<span class="hljs-string">&quot;SAVE TYPE=HTM FOLDER=* FILE=search_results <span class="hljs-subst">\n</span>&quot;</span>;<br>  <span class="hljs-variable">$macro</span> <span class="hljs-operator">=</span> <span class="hljs-variable">$macro</span>.<span class="hljs-string">&quot;&#x27;<span class="hljs-subst">\n</span>&quot;</span><br>  <span class="hljs-variable">$macro</span> <span class="hljs-operator">=</span> <span class="hljs-variable">$macro</span>.<span class="hljs-string">&quot;Run the parsing software in secondary browser tab<span class="hljs-subst">\n</span>&quot;</span><br>  <span class="hljs-variable">$macro</span> <span class="hljs-operator">=</span> <span class="hljs-variable">$macro</span>.<span class="hljs-string">&quot;TAB T=2&quot;</span><br>  <span class="hljs-variable">$macro</span> <span class="hljs-operator">=</span> <span class="hljs-variable">$macro</span>.<span class="hljs-string">&quot;URL GOTO=http://localhost/parser.php?if=&quot;</span>.<span class="hljs-variable">$product_arrat</span>[<span class="hljs-variable">$xx</span>][&#x27;<span class="hljs-type">ASIN</span>&#x27;].<span class="hljs-string">&quot;<span class="hljs-subst">\n</span>&quot;</span>; <span class="hljs-comment">//呼叫本地端parser</span><br>  <span class="hljs-variable">$macro</span> <span class="hljs-operator">=</span> <span class="hljs-variable">$macro</span>.<span class="hljs-string">&quot;&#x27;<span class="hljs-subst">\n</span>&quot;</span><br>  <span class="hljs-variable">$macro</span> <span class="hljs-operator">=</span> <span class="hljs-variable">$macro</span>.<span class="hljs-string">&quot;&#x27; Resume in original browser tab<span class="hljs-subst">\n</span>&quot;</span>;<br>  <span class="hljs-variable">$macro</span> <span class="hljs-operator">=</span> <span class="hljs-variable">$macro</span>.<span class="hljs-string">&quot;TAB T=1 <span class="hljs-subst">\n</span>&quot;</span>;<br>&#125;<br>file_put_contents(<span class="hljs-string">&quot;//PATH/MACRO_NAME.iim&quot;</span>, <span class="hljs-variable">$macro</span>);<br></code></pre></td></tr></table></figure>
+
+<p><strong>自動執行iMacros巨集</strong><br>在windows中啟動iMacros</p>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs armasm"><span class="hljs-comment">//run.bat</span><br><span class="hljs-symbol">php</span> create_macro.php<br><span class="hljs-symbol">start</span> /<span class="hljs-keyword">B</span> <span class="hljs-string">&quot;C:\Program Files\Mozilla Firefox\firefox.exe&quot;</span> http:<span class="hljs-comment">//127.0.0.1</span><br><span class="hljs-symbol">ping</span> <span class="hljs-number">127</span>.<span class="hljs-number">1</span>.<span class="hljs-number">1</span>.<span class="hljs-number">1</span> <span class="hljs-comment">//delay</span><br><span class="hljs-symbol">start</span> /<span class="hljs-keyword">B</span> <span class="hljs-string">&quot;C:\Program Files\Mozilla Firefox\firefox.exe&quot;</span> http:<span class="hljs-comment">//run.imacros.net/?m=test.iim</span><br></code></pre></td></tr></table></figure>
+
+<p>在Linux中啟動iMacros</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-comment">//run.php</span><br><span class="hljs-meta">&lt;?php</span><br><span class="hljs-title function_ invoke__">system</span>(<span class="hljs-string">&quot;firefox http://run.imacros.net/?m=test.iim&quot;</span>);<br><span class="hljs-meta">?&gt;</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>進一步的探索<br>其他技巧：</li>
+</ul>
+<ol>
+<li>將firefox設為預設瀏覽器，且不做其他用途  </li>
+<li>多個iMacros script不能在同一個桌面帳號執行，必須錯開時間，或者錯開使用者  </li>
+<li>可能需要登入安全網站，多瞭解iMacros對登入憑證加密的能力  </li>
+<li>IE版的iMacros不能支援分頁的功能</li>
+</ol>
+<h3 id="Chapter-25-部署與規模擴展"><a href="#Chapter-25-部署與規模擴展" class="headerlink" title="Chapter 25. 部署與規模擴展"></a>Chapter 25. 部署與規模擴展</h3><ul>
+<li>一對多的環境<br>一個機器人接受多個輸入資源<br>可以試著運用平行運算  </li>
+<li>一對一的環境<br>難以擴展規模<br>最大的挑戰在於如何避免機器人被當作具有攻擊意圖的對象  </li>
+<li>多對多的環境<br>可能是同一個script腳本的多個實體  </li>
+<li>多對一的環境<br>最難以擴展的架構<br>不小心就會發動DoS攻擊  </li>
+<li>規模擴展與服務阻斷攻擊<br>避免不小心發動了DoS<br>就算是很簡單的網路機器人，也能塞爆網站<br>目標網站本身沒效率<br>規模越擴展，問題越嚴重：尤其多對一架構可能造成目標網站癱瘓，但是優點是可以使用多個IP位置  </li>
+<li>為一個網路機器人建立多個執行實體<br>三種方法：</li>
+</ul>
+<ol>
+<li>用fork的方法複製出另一個額外的process  </li>
+<li>在作業系統中建立同一個script的多個實體  </li>
+<li>在多個硬體上執行相同的網路機器人：機器人網路(Botnet)</li>
+</ol>
+<ul>
+<li>Botnet的管理<br>Botnet的溝通方式：與管理的伺服器進行溝通，管理伺服器進行工作安排</li>
+</ul>
+<ol>
+<li><p>以Polling的方式與Botnet伺服器溝通</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><span class="hljs-keyword">include</span>(<span class="hljs-string">&#x27;LIB_http.php&#x27;</span>);<br><span class="hljs-variable">$post_array</span>[<span class="hljs-string">&#x27;STATUS&#x27;</span>] = <span class="hljs-string">&quot;TASK REQUEST&quot;</span>;<br><span class="hljs-variable">$post_array</span>[<span class="hljs-string">&#x27;BOT&#x27;</span>] = <span class="hljs-string">&quot;this webbot&#x27;s name&quot;</span>;<br><span class="hljs-variable">$post_array</span>[<span class="hljs-string">&#x27;VERSION&#x27;</span>] = <span class="hljs-string">&quot;script version level&quot;</span>;<br><span class="hljs-variable">$botnet_server_address</span> = <span class="hljs-string">&quot;https://.BOTNET_SERVER_ADDRESS&quot;</span>;<br><span class="hljs-variable">$reply</span> = <span class="hljs-title function_ invoke__">http_post_form</span>(<span class="hljs-variable">$botnet_server_address</span>, <span class="hljs-variable">$post_array</span>);<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>判斷是否有工作要執行<br>伺服器先判斷網路機器人的身份(名稱與憑證)，衡量伺服器負載能力。</p>
+</li>
+<li><p>Checkout程序<br>伺服器指派工作給網路機器人，設定時限。</p>
+</li>
+<li><p>指派工作<br>透過XML格式提供訊息</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">XML</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">TASK_ID</span>&gt;</span>9999<span class="hljs-tag">&lt;/<span class="hljs-name">TASK_ID</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">TIMESTAMP</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">TIMESTAMP</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">TARGET</span>&gt;</span>www.SomeWebSite.com<span class="hljs-tag">&lt;/<span class="hljs-name">TARGET</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">USERNAME</span>&gt;</span>username<span class="hljs-tag">&lt;/<span class="hljs-name">USERNAME</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">PASSWORD</span>&gt;</span>password<span class="hljs-tag">&lt;/<span class="hljs-name">PASSWORD</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">XML</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p>解析Botnet伺服器回傳的訊息</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><span class="hljs-variable">$task_id</span> = <span class="hljs-title function_ invoke__">return_between</span>(<span class="hljs-variable">$reply</span>[<span class="hljs-string">&#x27;PAGE&#x27;</span>], <span class="hljs-string">&quot;&lt;TASK_ID&gt;&quot;</span>, <span class="hljs-string">&quot;&lt;/TASK_ID&gt;&quot;</span>, EXCL);<br><span class="hljs-variable">$target</span> = <span class="hljs-title function_ invoke__">return_between</span>(<span class="hljs-variable">$reply</span>[<span class="hljs-string">&#x27;PAGE&#x27;</span>], <span class="hljs-string">&quot;&lt;TARGET&gt;&quot;</span>, <span class="hljs-string">&quot;&lt;/TARGET&gt;&quot;</span>, EXCL);<br><span class="hljs-variable">$username</span> = <span class="hljs-title function_ invoke__">return_between</span>(<span class="hljs-variable">$reply</span>[<span class="hljs-string">&#x27;PAGE&#x27;</span>], <span class="hljs-string">&quot;&lt;USERNAME&gt;&quot;</span>, <span class="hljs-string">&quot;&lt;/USERNAME&gt;&quot;</span>, EXCL);<br><span class="hljs-variable">$password</span> = <span class="hljs-title function_ invoke__">return_between</span>(<span class="hljs-variable">$reply</span>[<span class="hljs-string">&#x27;PAGE&#x27;</span>], <span class="hljs-string">&quot;&lt;PASSWORD&gt;&quot;</span>, <span class="hljs-string">&quot;&lt;/PASSWORD&gt;&quot;</span>, EXCL);<br><span class="hljs-meta">?&gt;</span><br></code></pre></td></tr></table></figure>
+<p>沒任務的範例</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">XML</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">TASK_ID</span>&gt;</span>NO TASK<span class="hljs-tag">&lt;/<span class="hljs-name">TASK_ID</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">TIMESTAMP</span>&gt;</span>...<span class="hljs-tag">&lt;/<span class="hljs-name">TIMESTAMP</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">XML</span>&gt;</span><br></code></pre></td></tr></table></figure>
+</li>
+<li><p>執行工作  </p>
+</li>
+<li><p>將擷取到的資料上傳給伺服器  </p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><span class="hljs-keyword">include</span>&lt;<span class="hljs-string">&#x27;LIB_http.php&#x27;</span>);<br><span class="hljs-variable">$post_array</span>[<span class="hljs-string">&#x27;STATUS&#x27;</span>] = <span class="hljs-string">&quot;DATA_COLLECTED&quot;</span>;<br><span class="hljs-variable">$post_array</span>[<span class="hljs-string">&#x27;BOT&#x27;</span>] = <span class="hljs-string">&quot;this webbot&#x27;s name&quot;</span>;<br><span class="hljs-variable">$post_array</span>[<span class="hljs-string">&#x27;VERSION&#x27;</span>] = <span class="hljs-string">&quot;script version level&quot;</span>;<br><span class="hljs-variable">$botnet_server_address</span> = <span class="hljs-string">&quot;https://&quot;</span>.BOTNET_SERVER_ADDRESS;<br><span class="hljs-variable">$reply</span> = <span class="hljs-title function_ invoke__">http_post_form</span>(<span class="hljs-variable">$botnet_server_address</span>, <span class="hljs-variable">$post_array</span>);<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>處理擷取到的資料<br>將回傳資料保存在資料結構或者資料庫中。<br>伺服器可能會留下一些log。</p>
+</li>
+</ol>
+<ul>
+<li>進一步的探索<br>如何增加待完成工作列表到Botnet伺服器？：透過API輸入？<br>Botnet伺服器的最大能力？<br>掩人耳目的網路機器人，使用代理或其他技術？<br>自動從伺服器下載軟體更新。</li>
+</ul>
+<h2 id="Part-IV-比較大的考量"><a href="#Part-IV-比較大的考量" class="headerlink" title="Part IV 比較大的考量"></a>Part IV 比較大的考量</h2><h3 id="Chapter-26-能掩人耳目的網路機器人"><a href="#Chapter-26-能掩人耳目的網路機器人" class="headerlink" title="Chapter 26. 能掩人耳目的網路機器人"></a>Chapter 26. 能掩人耳目的網路機器人</h3><ul>
+<li><p>為什麼要設計出能掩人耳目的網路機器人？<br>避免被當作駭客攻擊：<br>Log記錄檔案的三種類型：存取log紀錄、錯誤log紀錄、自訂log紀錄<br>Log監視軟體</p>
+</li>
+<li><p>“掩人耳目”，就意味著要模仿人類的行為模式<br>善待你的資料來源<br>選擇在比較繁忙時，執行你的網路機器人<br>別老是在每天的同一個時間，執行你的網路機器人<br>別在假期和週末執行你的網路機器人<br>在取得網頁和網頁之間，插入隨機的延遲時間  </p>
+</li>
+<li><p>最終的想法</p>
+</li>
+</ul>
+<h3 id="Chapter-27-代理伺服器"><a href="#Chapter-27-代理伺服器" class="headerlink" title="Chapter 27. 代理伺服器"></a>Chapter 27. 代理伺服器</h3><ul>
+<li>什麼是代理伺服器<br>代理你做某件事的某個東西  </li>
+<li>在虛擬世界中的代理伺服器<br>列印機代理伺服器、內容過濾伺服器、防火牆</li>
+<li>為什麼網路機器人的開發者要使用代理伺服器<br>運用代理伺服器達到匿名的效果<br>使用代理伺服器可以假裝你在別的地方</li>
+<li>使用代理伺服器<br>在瀏覽器中使用代理伺服器<br>透過PHP&#x2F;CURL來使用代理伺服器<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-regexp">//</span> <span class="hljs-variable">$session_id</span> = curl_init()<br>curl_setopt(<span class="hljs-variable">$session_id</span>, CURLOPT_PROXY, <span class="hljs-variable">$proxy_ip</span>.<span class="hljs-string">&quot;: &quot;</span>.<span class="hljs-variable">$proxy_port</span>);<br>curl_setopt(<span class="hljs-variable">$session_id</span>, CURLOPT_PROXY_TYPE, CURLPROXY_SOCKS5); <span class="hljs-regexp">//</span>default: CURL_PROXY_HTTP<br></code></pre></td></tr></table></figure></li>
+<li>代理伺服器的種類</li>
+</ul>
+<ol>
+<li><p>開放式代理伺服器(open proxy)<br><strong>開放式代理伺服器的種類：</strong><br>透明代理伺服器：通常會將IP位置放在HTTP_X_FORWARDED_FORWARDED變數中<br>匿名代理伺服器：不會紀錄原始IP，不過仍然看偵測出經由代理伺服器轉送<br>假冒代理伺服器：試圖隱藏真實伺服器<br><strong>開放式代理伺服器的黑暗面：</strong><br>很少是正當理由開放，有可能是政府機關&#x2F;私人監控，或者私人電腦中毒。<br><strong>關於開放式代理伺服器清單服務的更多訊息：</strong><br>有提供開放代理伺服器清單的服務公司。</p>
+</li>
+<li><p>Tor<br>使用Tor：需要安裝Polipo(執行於電腦中的代理伺服器)<br>設定PHP&#x2F;CURL使用Tor：port為8118<br>Tor的缺點：<br>無法保證完全匿名，網站可能透過JavaScript或瀏覽器外掛跳過Tor的作用。<br>速度較慢。</p>
+</li>
+<li><p>商業化代理伺服器<br>例如：Anonymizer(<a target="_blank" rel="noopener" href="http://www.anonymizer.com)、hidemyip(http//HideMyIP.com)">http://www.Anonymizer.com)、HideMyIP(http://HideMyIP.com)</a></p>
+</li>
+</ol>
+<ul>
+<li>最終的想法<br>匿名只是一種有幫助的做法，而不是一種絕對有效的功能<br>建立自己的代理伺服器</li>
+</ul>
+<h3 id="Chapter-28-具有容錯能力的網路機器人"><a href="#Chapter-28-具有容錯能力的網路機器人" class="headerlink" title="Chapter 28. 具有容錯能力的網路機器人"></a>Chapter 28. 具有容錯能力的網路機器人</h3><ul>
+<li>具有容錯能力的網路機器人，幾種不同的類型</li>
+</ul>
+<p>####適應URL的改變：  </p>
+<ol>
+<li>只下載目標網站中確實可取得的頁面<br>避免對已經不存在的頁面提出請求：</li>
+</ol>
+<p><strong>透過HTTP代碼檢查</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?</span><br><span class="hljs-keyword">include</span>(<span class="hljs-string">&quot;LIB_http.php&quot;</span>);<br><span class="hljs-variable">$page</span> = <span class="hljs-title function_ invoke__">http_get</span>(<span class="hljs-variable">$target</span>=<span class="hljs-string">&quot;www.schrenk.com&quot;</span>, <span class="hljs-variable">$ref</span>=<span class="hljs-string">&quot;&quot;</span>);<br><span class="hljs-keyword">if</span>(<span class="hljs-variable">$page</span>[<span class="hljs-string">&#x27;STATUS&#x27;</span>][<span class="hljs-string">&#x27;http_code&#x27;</span>]!=<span class="hljs-number">200</span>)<br>  <span class="hljs-title function_ invoke__">error_handler</span>(<span class="hljs-string">&quot;BAD RESULT&quot;</span>, <span class="hljs-variable">$page</span>[<span class="hljs-string">&#x27;STATUS&#x27;</span>][<span class="hljs-string">&#x27;http_code&#x27;</span>]);<br><span class="hljs-meta">?&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>檢查連結路徑</strong><br>確保經由正確路徑進入，而非已過期的連結   </p>
+<p><strong>利用使用者名稱，確認表單提交結果</strong>  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-variable">$username</span> = <span class="hljs-string">&quot;GClassmann&quot;</span>;<br><span class="hljs-variable">$page</span> = http_get(<span class="hljs-variable">$target</span>, <span class="hljs-variable">$ref</span>=<span class="hljs-string">&quot;&quot;</span>);<br><span class="hljs-keyword">if</span>(!stristr(<span class="hljs-variable">$page</span>[<span class="hljs-string">&#x27;FILE&#x27;</span>], <span class="hljs-string">&quot;<span class="hljs-variable">$username</span>&quot;</span>))&#123;<br>    <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;authentication error&quot;</span>;<br>    error_handler(<span class="hljs-string">&quot;BAD AUTHENTICATION for &quot;</span>.<span class="hljs-variable">$username</span>, <span class="hljs-variable">$target</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>能隨著標頭的重導向，轉移到已被更新過的頁面<br>HTTP標頭包含location:URL  <figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">curl<span class="hljs-constructor">_setopt($<span class="hljs-params">curl_session</span>, CURLOPT_FOLLOWLOCATION, TRUE)</span>;<br>curl<span class="hljs-constructor">_setopt($<span class="hljs-params">curl_session</span>, CURLOPT_MAXREDIRS, 4)</span>;<br></code></pre></td></tr></table></figure></li>
+</ol>
+<p><strong>&lt;head&gt;標籤之間的頁面重導向</strong><br>範例：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">http-equiv</span>=<span class="hljs-string">&quot;refresh&quot;</span> <span class="hljs-attr">countent</span>=<span class="hljs-string">&quot;0; URL=http://www.nostarch.com&quot;</span>&gt;</span><br>  <span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p>ref. chapter28-1_meta_tag_redirection  </p>
+<ul>
+<li>只搜尋head tag  </li>
+<li>在meta tag中搜尋http-equiv屬性  </li>
+<li>重導向的URL被轉換為一個完整的解析地址  </li>
+<li>找到第一個重導向指令後，script就會停止</li>
+</ul>
+<p><strong>透過JavaScript的重導向</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="language-javascript"> <span class="hljs-variable language_">document</span>.<span class="hljs-property">location</span> = <span class="hljs-string">&#x27;http://www.schrenk.com&#x27;</span>; </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p>透過JavaScript的重導向可能會很複雜，不容易被解析(例如function呼叫)。</p>
+<ol start="3">
+<li>能引用參照的值，指出你所跟隨的連結，是來自於某個仍然存在於網站上的頁面<br>維護引用參照值的正確性。</li>
+</ol>
+<p>####適用頁面內容的改變：</p>
+<ol>
+<li>避免位置解析：可能由於網頁排版改變而無法運作  </li>
+<li>使用相對解析：找出關鍵元素後，再尋找關聯的資訊  </li>
+<li>尋找那些不太可能會發生變化的界標：改變頻率最低的大多是與伺服器應用有關的部分(type&#x3D;”hidden”的資料，或者元素id等)</li>
+</ol>
+<p>####適應表單中的改變：<br>先進行表單診斷<br>檢查表單變數，包含：使用的method、action、名稱與資料<br>ref. chapter28-2_form_parser.php</p>
+<p>####適應cookie的改變：<br>LIP_http函式庫並不會自動刪除過期的cookie  </p>
+<p>####適應網路斷線與網路壅塞的狀況：<br>設定time-out值：</p>
+<figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs autoit"><span class="hljs-meta">#default is 25s</span><br>curl_setopt($curl_session, CURLOPT_TIMEOUT, $timeout_value)<span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure>
+
+<p>PHP延長超時設定</p>
+<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs scss"><span class="hljs-built_in">set_time_limit</span>(<span class="hljs-number">60</span>);<br><span class="hljs-built_in">set_time_limit</span>(<span class="hljs-number">0</span>); <span class="hljs-comment">// remove timeout setting</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>錯誤處理程式<br>錯誤訊息記錄應該包含以下內容：哪一個網路機器人出問題？為什麼出問題？<br>出問題的日期與時間？</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-keyword">function</span> webbot_error_handler(<span class="hljs-variable">$failure_mode</span>)&#123;<br>    <span class="hljs-variable">$email_address</span> = <span class="hljs-string">&quot;your.account@someserver.com&quot;</span>;<br>    <span class="hljs-variable">$email_subject</span> = <span class="hljs-string">&quot;Webbot Failure Notification&quot;</span>;<br>    <span class="hljs-variable">$email_message</span> = <span class="hljs-string">&quot;Webbot T-Rex encountered a fatal error&lt;br&gt;&quot;</span>;<br>    <span class="hljs-variable">$email_message</span> = <span class="hljs-variable">$email_message</span>.<span class="hljs-variable">$failure_mode</span>.<span class="hljs-string">&quot;&lt;br&gt;&quot;</span>;<br>    <span class="hljs-variable">$email_message</span> = <span class="hljs-variable">$email_message</span>.<span class="hljs-string">&quot;at&quot;</span>.date(<span class="hljs-string">&quot;r&quot;</span>).<span class="hljs-string">&quot;&lt;br&gt;&quot;</span>;<br>    mail(<span class="hljs-variable">$email_address</span>, <span class="hljs-variable">$email_subject</span>, <span class="hljs-variable">$email_message</span>);<br>    <span class="hljs-keyword">exit</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>為機器人增加狀態，執行前檢查是否需要執行，若發生錯誤時透過error handler改變狀態<br>以移除排程。</p>
+</li>
+<li><p>進一步的探索</p>
+</li>
+</ul>
+<h3 id="Chapter-29-對網路機器人友善的網站設計"><a href="#Chapter-29-對網路機器人友善的網站設計" class="headerlink" title="Chapter 29. 對網路機器人友善的網站設計"></a>Chapter 29. 對網路機器人友善的網站設計</h3><ul>
+<li><p>針對搜尋引擎的網路蜘蛛，進行網頁的最佳化(搜尋引擎最佳化, SEO)<br>定義良好的鏈結<br>Google Bombs與Spam Indexing：針對特定網站，利用相同的鏈結文字描述建立出多個鏈結<br>Title標籤<br>Meta標籤<br>標題標籤(h1~h6)<br>圖像的alt屬性  </p>
+</li>
+<li><p>會妨礙到搜尋引擎網路蜘蛛的網頁設計技術<br>JavaScript：執行前難以被辨認<br>非ASCII內容：如Flash  </p>
+</li>
+<li><p>設計”僅含資料”的介面</p>
+</li>
+</ul>
+<p>可擴展標記語言(XML)(ref. chapter29-1_xml_parser.php)  </p>
+<p>輕量級資料交換：需注意安全性問題(如使用eval()直接將回傳內容保存為變數的做法)<br>ref. chapter29-2_light-weight_data_exchange_interface.php  </p>
+<p>簡單物件存取協定(SOAP)：  </p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-comment">//SOAP呼叫範例</span><br><span class="hljs-comment">// PHP5內建SOAP, PHP4需要使用PEAR(PHP extension and Application Repository)</span><br><span class="hljs-keyword">include</span>(<span class="hljs-string">&quot;inc/PEAR/SOAP&quot;</span>);<br><span class="hljs-variable">$params</span> = <span class="hljs-keyword">array</span>(<br>    <span class="hljs-string">&#x27;manufacturer&#x27;</span> =&gt; <span class="hljs-string">&quot;XYZ CORP&quot;</span>,<br>    <span class="hljs-string">&#x27;mode&#x27;</span> =&gt; <span class="hljs-string">&#x27;development&#x27;</span>,<br>    <span class="hljs-string">&#x27;sort&#x27;</span> =&gt; <span class="hljs-string">&#x27;+product&#x27;</span>,<br>    <span class="hljs-string">&#x27;type&#x27;</span> =&gt; <span class="hljs-string">&#x27;heavy&#x27;</span>,<br>    <span class="hljs-string">&#x27;userkey&#x27;</span> =&gt; <span class="hljs-variable">$ACCESS_KEY</span>);<br><span class="hljs-variable">$WSDL</span> = <span class="hljs-keyword">new</span> <span class="hljs-title function_ invoke__">SOAP_WSDL</span>(<span class="hljs-variable">$ADDRESS_OF_SOAP_INTERFACE</span>);<br>client <span class="hljs-variable">$client</span> = <span class="hljs-variable">$WSDL</span>-&gt;<span class="hljs-title function_ invoke__">getProxy</span>();<br><span class="hljs-variable">$result_array</span> = <span class="hljs-variable">$client</span>-&gt;<span class="hljs-title function_ invoke__">SomeGenericSOAPRequest</span>(<span class="hljs-variable">$params</span>);<br></code></pre></td></tr></table></figure>
+<p>SOAP優點：跨平台<br>SOAP缺點：門檻較高  </p>
+<p>REST(Representational State Transfer)  </p>
+<ul>
+<li>最終的想法</li>
+</ul>
+<h3 id="Chapter-30-獵殺網路蜘蛛"><a href="#Chapter-30-獵殺網路蜘蛛" class="headerlink" title="Chapter 30. 獵殺網路蜘蛛"></a>Chapter 30. 獵殺網路蜘蛛</h3><p>網站擁有者可能為了下面幾種目的，希望隔絕網路機器人：<br>保護智慧財產<br>保護自己的電子郵件地址<br>規範管理網站的使用頻率<br>避免放在網路上的媒體被人保存起來<br>為所有使用者建立公平競爭的環境</p>
+<ul>
+<li><p>和善的提出要求<br>建立服務條款協定<br>使用robots.txt檔案<br>使用Robots Meta標籤  </p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;robots&quot;</span> <span class="hljs-attr">content</span>=<span class="hljs-string">&quot;noindex, nofollow&quot;</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span><br></code></pre></td></tr></table></figure>
+</li>
+<li><p>建立速度上的障礙<br>選擇性允許某些網路代理程式，進行存取動作：記得在伺服器端進行檢查<br>使用擾亂(obfuscation)的做法<br>使用cookie、加密、JavaScript與重導向<br>使用者身份認證<br>經常更新你的網站(改變元素順序、表單方法、檔案名稱、參考點文字)<br>將文字嵌入到其他媒體中，如CAPTCHA(Completely Automated Public Turing test to tell Computers and Humans Apart)。 破解：<a target="_blank" rel="noopener" href="http://decaptcher.com/">http://decaptcher.com</a>  </p>
+</li>
+<li><p>設下陷阱<br>建立一個捕捉網路蜘蛛的陷阱：人類無法進行的操作  </p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">&lt;a <span class="hljs-attribute">href</span>=<span class="hljs-string">&quot;spider_trap.php&quot;</span>&gt;&lt;img <span class="hljs-attribute">src</span>=<span class="hljs-string">&quot;spacer.gif&quot;</span> <span class="hljs-attribute">width</span>=<span class="hljs-string">&quot;0&quot;</span> <span class="hljs-attribute">height</span>=<span class="hljs-string">&quot;0&quot;</span>&gt;&lt;/a&gt;<br></code></pre></td></tr></table></figure></li>
+</ul>
+<p>對不想要的網路蜘蛛，能做的一些好玩的事  </p>
+<table>
+<thead>
+<tr>
+<th>策略</th>
+<th>相應做法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>驅逐</td>
+<td>記錄IP之後進行阻擋</td>
+</tr>
+<tr>
+<td>限制存取</td>
+<td>記錄IP之後限制可存取的資源</td>
+</tr>
+<tr>
+<td>誤導</td>
+<td>將網路蜘蛛重導到另一個頁面中</td>
+</tr>
+<tr>
+<td>分析</td>
+<td>識別IP(如：<a target="_blank" rel="noopener" href="http://www.arin.net),追蹤擁有者/">http://www.arin.net)，追蹤擁有者</a></td>
+</tr>
+<tr>
+<td>忽略</td>
+<td>忽略所有自動化操作</td>
+</tr>
+</tbody></table>
+<ul>
+<li>最終的想法</li>
+</ul>
+<h3 id="Chapter-31-讓你的網路機器人遠離是非"><a href="#Chapter-31-讓你的網路機器人遠離是非" class="headerlink" title="Chapter 31. 讓你的網路機器人遠離是非"></a>Chapter 31. 讓你的網路機器人遠離是非</h3><ul>
+<li>一切都源自於尊重<br>網站資源都是擁有者付費並非免費資源  </li>
+<li>版權<br>確實向各方進行諮詢<br>暸解版權法的一些基本概念：<br>版權並不需要經過註冊的程序<br>在預設的情況下，創作總是”保留所有權利”<br>不能對一個事實，主張擁有其版權<br>如果能以具有創造性的方式，呈現整群的事實，就可以主張擁有版權<br>在合理使用法(Fair Use Laws)的規範下，可使用部分的內容素材  </li>
+<li>侵入動產<br>過度消耗目標伺服器的頻寬，影響效能或其他人的使用</li>
+<li>網際網路的相關法律<br>維吉尼亞洲反垃圾郵件法(anti-spam)  </li>
+<li>最終的想法</li>
+</ul>
+<h3 id="Appendix-A-PHP-x2F-CURL參考資料"><a href="#Appendix-A-PHP-x2F-CURL參考資料" class="headerlink" title="Appendix A. PHP&#x2F;CURL參考資料"></a>Appendix A. PHP&#x2F;CURL參考資料</h3><ul>
+<li>建立一個最精簡的PHP&#x2F;CURL Session<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">&lt;?<br>$s = curl<span class="hljs-constructor">_init()</span>;<br>curl<span class="hljs-constructor">_setopt($<span class="hljs-params">s</span>, CURLOPT_URL, <span class="hljs-string">&quot;http://www.schrenk.com&quot;</span>)</span>;<br>curl<span class="hljs-constructor">_setopt($<span class="hljs-params">s</span>, CURLOPT_RETURNTRANSFER, TRUE)</span>;<br><br>$downloaded_page = curl<span class="hljs-constructor">_exec($<span class="hljs-params">s</span>)</span>;<br>curl<span class="hljs-constructor">_close($<span class="hljs-params">s</span>)</span>;<br>?&gt;<br></code></pre></td></tr></table></figure></li>
+<li>初始化PHP&#x2F;CURL Session<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs scss"><span class="hljs-built_in">curl_init</span>();<br></code></pre></td></tr></table></figure></li>
+<li>PHP&#x2F;CURL選項設定<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs awk">curl_setopt(<span class="hljs-variable">$s</span>, CURLOPT_URL, <span class="hljs-string">&quot;http://www.schrenk.com&quot;</span>); <span class="hljs-regexp">//</span>定義目標網站<br>curl_setopt(<span class="hljs-variable">$s</span>, CURLOPT_RETURNTRANSFER, TRUE); <span class="hljs-regexp">//</span>以字串回傳結果<br>curl_setopt(<span class="hljs-variable">$s</span>, CURLOPT_REFERER, <span class="hljs-string">&quot;http://www.domain.com/index.php&quot;</span>); <span class="hljs-regexp">//</span>設定參照網址<br>curl_setopt(<span class="hljs-variable">$s</span>, CURLOPT_FOLLOWLOCATION, TRUE); <span class="hljs-regexp">//</span>跟隨網站重導向(僅header內容，不包含refresh meta或JavaScript中的設定)，需設定CURLOPT_MAXREDIRS<br>curl_setopt(<span class="hljs-variable">$s</span>, CURLOPT_MAXREDIRS, <span class="hljs-number">4</span>); <span class="hljs-regexp">//</span>最大重導向次數<br>curl_setopt(<span class="hljs-variable">$s</span>, CURLOPT_USERAGENT, <span class="hljs-string">&quot;Webbot&quot;</span>); <span class="hljs-regexp">//</span>設定代理程式名稱<br>curl_setopt(<span class="hljs-variable">$s</span>, CURLOPT_NOBODY, TRUE); <span class="hljs-regexp">//</span>排除body部分<br>curl_setopt(<span class="hljs-variable">$s</span>, CURLOPT_HEADER, TRUE); <span class="hljs-regexp">//</span>包含標頭(預設不包含)<br>curl_setopt(<span class="hljs-variable">$s</span>, CURLOPT_TIMEOUT, <span class="hljs-number">30</span>); <span class="hljs-regexp">//</span>設定timeout值，單位秒<br>curl_setopt(<span class="hljs-variable">$s</span>, CURLOPT_COOKIEFILE, <span class="hljs-string">&quot;c:\bots\cookies.txt&quot;</span>); <span class="hljs-regexp">//</span>讀取cookie檔案<br>curl_setopt(<span class="hljs-variable">$s</span>, CURLOPT_COOKIEJAR, <span class="hljs-string">&quot;c:\bots\cookies.txt&quot;</span>); <span class="hljs-regexp">//</span>寫入cookie檔案<br>curl_setopt(<span class="hljs-variable">$s</span>, CURLOPT_HTTPHEADER, [<span class="hljs-string">&quot;Mime-Version:1.0&quot;</span>, <span class="hljs-string">&quot;Content-type: text/html; charset=iso-8859-1&quot;</span>, <span class="hljs-string">&quot;Accept-Encoding: compress, gzip&quot;</span>]); <span class="hljs-regexp">//</span>配置HTTP header<br>curl_setopt(<span class="hljs-variable">$s</span>, CURLOPT_SSL_VERIFYPEER, FALSE); <span class="hljs-regexp">//</span>設定是否使用客戶端憑證<br>curl_setopt(<span class="hljs-variable">$s</span>, CURLOPT_USERPWD, <span class="hljs-string">&quot;passwd&quot;</span>); <span class="hljs-regexp">//</span>設定身份認證密碼<br>curl_setopt(<span class="hljs-variable">$s</span>, CURLOPT_UNRESTICTED_AUTH, TRUE); <span class="hljs-regexp">//</span>若有設定重導向需要開啟<br>curl_setopt(<span class="hljs-variable">$s</span>, CURLOPT_POST, TRUE); <span class="hljs-regexp">//</span>使用POST<br>curl_setopt(<span class="hljs-variable">$s</span>, CURLOPT_POSTFIELDS, <span class="hljs-string">&quot;var1=1&amp;var2=2&quot;</span>); <span class="hljs-regexp">//</span>設定POST內容<br>curl_setopt(<span class="hljs-variable">$s</span>, CURLOPT_VERBOSE, FALSE); <span class="hljs-regexp">//</span>關閉詳細模式<br>curl_setopt(<span class="hljs-variable">$s</span>, CURLOPT_PORT, <span class="hljs-number">234</span>); <span class="hljs-regexp">//</span>設定使用的port<br></code></pre></td></tr></table></figure></li>
+<li>執行PHP&#x2F;CURL指令<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs scss"><span class="hljs-built_in">curl_exec</span>();<br><span class="hljs-built_in">curl_getinfo</span>(); <span class="hljs-comment">//檢索PHP/CRUL Session訊息</span><br><span class="hljs-built_in">curl_error</span>(); <span class="hljs-comment">//回傳可能發生在PHP/CURL session期間的錯誤</span><br></code></pre></td></tr></table></figure></li>
+<li>關閉PHP&#x2F;CURL Session<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs scss"><span class="hljs-built_in">curl_close</span>();<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="Resource"><a href="#Resource" class="headerlink" title="Resource"></a>Resource</h3><p><a target="_blank" rel="noopener" href="http://www.webbotsspidersscreenscrapers.com/">官方網站</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%A8%8B%E5%BC%8F%E8%A8%AD%E8%A8%88/" class="category-chain-item">程式設計</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E7%A8%8B%E5%BC%8F%E8%A8%AD%E8%A8%88/%E9%96%B1%E8%AE%80%E7%AD%86%E8%A8%98/" class="category-chain-item">閱讀筆記</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%B6%B2%E8%B7%AF%E7%88%AC%E8%9F%B2/">#網路爬蟲</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>網路機器人、網路蜘蛛與網路爬蟲 PHP/CURL程式設計指南(第二版)</div>
+      <div>http://example.com/2022/06/19/PHP-CURL-Programming/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Chris Suo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>June 19, 2022</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>Licensed under</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       Copyright © 2022 Chris. All rights reserved.<br/> This blog is made by <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a><br/> Theme is <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
