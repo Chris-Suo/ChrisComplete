@@ -16,16 +16,16 @@
   <meta name="author" content="Chris Suo">
   <meta name="keywords" content="">
   
-    <meta name="description" content="前言JavaScript一直是我蠻喜歡的程式語言，原因可能是因為他的執行環境很方便(只要打開瀏覽器就可以使用)，不過更多的可能是一種”情結”，畢竟我第一個接觸的程式語言就是JavaScript。對於JavaScript的評價有褒有貶，有些人推崇它的彈性，有些人深陷它奇怪的行為。這邊先不評論太多，只是整理一些有趣的小技巧。 Trick 1: 判斷變數類型是否為PrimitiveObject建構式可以">
+    <meta name="description" content="前言JavaScript一直是我滿喜歡的程式語言，原因可能是因為他的執行環境很方便(只要打開瀏覽器就可以使用)，不過更多的可能是一種”情結”，畢竟我第一個接觸的程式語言就是JavaScript。對於JavaScript的評價有褒有貶，有些人推崇它的彈性，有些人深陷它奇怪的行為。這邊先不評論太多，只是整理一些有趣的小技巧。 Trick 1: 判斷變數類型是否為PrimitiveObject建構式可以">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JavaScript奇技淫巧">
 <meta property="og:url" content="https://chris-suo.github.io/ChrisComplete/2022/06/19/Javascript-Trick/index.html">
 <meta property="og:site_name" content="Chris Complete">
-<meta property="og:description" content="前言JavaScript一直是我蠻喜歡的程式語言，原因可能是因為他的執行環境很方便(只要打開瀏覽器就可以使用)，不過更多的可能是一種”情結”，畢竟我第一個接觸的程式語言就是JavaScript。對於JavaScript的評價有褒有貶，有些人推崇它的彈性，有些人深陷它奇怪的行為。這邊先不評論太多，只是整理一些有趣的小技巧。 Trick 1: 判斷變數類型是否為PrimitiveObject建構式可以">
+<meta property="og:description" content="前言JavaScript一直是我滿喜歡的程式語言，原因可能是因為他的執行環境很方便(只要打開瀏覽器就可以使用)，不過更多的可能是一種”情結”，畢竟我第一個接觸的程式語言就是JavaScript。對於JavaScript的評價有褒有貶，有些人推崇它的彈性，有些人深陷它奇怪的行為。這邊先不評論太多，只是整理一些有趣的小技巧。 Trick 1: 判斷變數類型是否為PrimitiveObject建構式可以">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://chris-suo.github.io/ChrisComplete/img/createObject.png">
 <meta property="article:published_time" content="2022-06-19T12:13:03.000Z">
-<meta property="article:modified_time" content="2022-06-19T12:57:00.726Z">
+<meta property="article:modified_time" content="2022-06-21T01:19:09.186Z">
 <meta property="article:author" content="Chris Suo">
 <meta property="article:tag" content="JavaScript">
 <meta name="twitter:card" content="summary_large_image">
@@ -251,7 +251,7 @@
             
               <div class="markdown-body">
                 
-                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>JavaScript一直是我蠻喜歡的程式語言，原因可能是因為他的執行環境很方便(只要打開瀏覽器就可以使用)，不過更多的可能是一種”情結”，畢竟我第一個接觸的程式語言就是JavaScript。<br>對於JavaScript的評價有褒有貶，有些人推崇它的彈性，有些人深陷它奇怪的行為。<br>這邊先不評論太多，只是整理一些有趣的小技巧。</p>
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>JavaScript一直是我滿喜歡的程式語言，原因可能是因為他的執行環境很方便(只要打開瀏覽器就可以使用)，不過更多的可能是一種”情結”，畢竟我第一個接觸的程式語言就是JavaScript。<br>對於JavaScript的評價有褒有貶，有些人推崇它的彈性，有些人深陷它奇怪的行為。<br>這邊先不評論太多，只是整理一些有趣的小技巧。</p>
 <h2 id="Trick-1-判斷變數類型是否為Primitive"><a href="#Trick-1-判斷變數類型是否為Primitive" class="headerlink" title="Trick 1: 判斷變數類型是否為Primitive"></a>Trick 1: 判斷變數類型是否為Primitive</h2><p>Object建構式可以用來包裝(wrapper)變數，例如將“number”包裝成“number物件”，而已經是object的變數則Object建構式會回傳值。<br>因此透過判斷Object回傳的內容是否等於變數值，可以用來判斷是否為物件。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">let</span> v1 = <span class="hljs-number">1</span>; <span class="hljs-comment">// primitive</span><br><span class="hljs-keyword">let</span> v2 = [<span class="hljs-number">2</span>, <span class="hljs-number">3</span>]; <span class="hljs-comment">// array object, non-primitive</span><br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">isPrimitive</span>(<span class="hljs-params">val</span>) &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-title class_">Object</span>(val) !== val;<br>&#125;<br><br><span class="hljs-title function_">isPrimitive</span>(v1); <span class="hljs-comment">// true</span><br><span class="hljs-title function_">isPrimitive</span>(v2); <span class="hljs-comment">// false</span><br></code></pre></td></tr></table></figure>
 
@@ -354,6 +354,12 @@
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/ChrisComplete/2022/06/21/Json-c-Usage/" title="JSON-c的使用方法">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">JSON-c的使用方法</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
