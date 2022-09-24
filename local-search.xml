@@ -4,6 +4,60 @@
   
   
   <entry>
+    <title>OpenBMC學習筆記</title>
+    <link href="/ChrisComplete/2022/09/24/OpenBMC-Note/"/>
+    <url>/ChrisComplete/2022/09/24/OpenBMC-Note/</url>
+    
+    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>公司最近在推OpenBMC，這邊紀錄自己的學習筆記。<br>預計會有不少內容，索性獨立出來一個新的類別(OpenBMC)，這篇算是系列文的索引。</p><p>“閱讀筆記”系列文是參考OpenBMC官方<a href="https://www.youtube.com/channel/UC7uaW4PyzmougoMPgh7taOw">Youtube頻道</a>的學習筆記，<br>相關投影片可以由OpenBMC GitHub的<a href="https://github.com/openbmc/openbmc/wiki/Presentations#openbmc-learning-series2020">wiki頁面</a>取得。</p><p>“實作紀錄”會紀錄一些實作與分析的細節。</p><p>其他內容動態增加中。</p><h2 id="閱讀筆記"><a href="#閱讀筆記" class="headerlink" title="閱讀筆記"></a>閱讀筆記</h2><p><a href="/ChrisComplete/2022/09/24/OpenBMC-User-Management/">OpenBMC: User Management</a></p><p>持續更新中…</p><h2 id="實作紀錄"><a href="#實作紀錄" class="headerlink" title="實作紀錄"></a>實作紀錄</h2><p>更新中…</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>程式設計</category>
+      
+      <category>OpenBMC</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>OpenBMC</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>OpenBMC: User Management</title>
+    <link href="/ChrisComplete/2022/09/24/OpenBMC-User-Management/"/>
+    <url>/ChrisComplete/2022/09/24/OpenBMC-User-Management/</url>
+    
+    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>此系列文是參考OpenBMC官方<a href="https://www.youtube.com/channel/UC7uaW4PyzmougoMPgh7taOw">Youtube頻道</a>的學習筆記，<br>相關投影片可以由OpenBMC GitHub的<a href="https://github.com/openbmc/openbmc/wiki/Presentations#openbmc-learning-series2020">wiki頁面</a>取得。</p><h2 id="具備知識"><a href="#具備知識" class="headerlink" title="具備知識"></a>具備知識</h2><p>這邊假設聽眾具備基礎的BMC(包含IPMI、Redfish等)知識。<br>其中D-Bus在OpenBMC是重要的IPC溝通方式，也需要有點基本認識。</p><h2 id="User-Management設計概念"><a href="#User-Management設計概念" class="headerlink" title="User Management設計概念"></a>User Management設計概念</h2><p>OpenBMC希望設計一個通用的使用者管理，而非以往大多以IPMI為中心的”Interface Specific”作法，即：任何服務(WebUI、Redfish等)都與IPMI共用使用者。</p><p>為了達到此目的，OpenBMC將User Management獨立為單一的daemon，並建立通用的D-Bus API提供操作，<br>且只有一個API可以去取得local或remote的使用者資訊。</p><p>另外，考量易用性與安全性，OpenBMC使用PAM modules而非單純的D-Bus API來進行驗證(登入)與修改密碼的操作。</p><p>OpenBMC也支援RMCP+登入。</p><p>總之，在設計概念上，基本的username、group以及privileges都是由這個通用的使用者管理來進行維護，<br>其餘的設定則交由各個應用程式自行維護。</p><h2 id="預設的Groups與Privilege-Roles"><a href="#預設的Groups與Privilege-Roles" class="headerlink" title="預設的Groups與Privilege Roles"></a>預設的Groups與Privilege Roles</h2><p>這邊有幾個預設的groups：ssh、ipmi、redfish、web。<br>若要讓使用者使用這些功能就必須將user加入這些群組。</p><p>此外還有一些預設的privilege roles：<br><img src="/ChrisComplete/img/openbmc-privilege.png"></p><h2 id="架構概念圖"><a href="#架構概念圖" class="headerlink" title="架構概念圖"></a>架構概念圖</h2><p><img src="/ChrisComplete/img/openbmc-architecture.png"></p><p>主要使用者管理由Common User Manager(Phosphor-user-manager)負責，其他應用程式(如：Web Service &#x2F; Redfish、IPMI等)則透過D-Bus的API呼叫來取得或建立使用者。</p><p>應用程式可以透過監控D-Bus上的”interfacesAdded”、”interfacesRemoved”、與”PropertiesChanged”這幾個signal來cache使用者資訊。</p><h2 id="主要元件"><a href="#主要元件" class="headerlink" title="主要元件"></a>主要元件</h2><p>整個User Management包含兩個主要的元件：</p><h3 id="1-Phosphor-user-manager"><a href="#1-Phosphor-user-manager" class="headerlink" title="1. Phosphor-user-manager"></a>1. Phosphor-user-manager</h3><p>Unix風格的使用者管理器，所謂Unix風格就是利用OS提供的操作(例如：adduser、deluser等)進行使用者管理，其使用者資訊的設定檔會被儲存於目錄&#x2F;etc&#x2F;password與&#x2F;etc&#x2F;shadow中。</p><p>支援LDAP的配置以及privilege映射。</p><p>相關的D-Bus interface定義在位置：&#x2F;xyz&#x2F;openbmc_project&#x2F;user</p><p>(註：問答有提到目前的D-Bus API實作不穩定，所以如果要透過API實作自己的management則需自行承擔風險)</p><p>這邊簡單介紹phosphor-user-manage的interface：<br><img src="/ChrisComplete/img/openbmc-phosphor-interface.png"><br>預設配置：no lockout, minlenght(8), no timeout, rememberOldPassword(0)</p><h3 id="2-Stacked-PAM"><a href="#2-Stacked-PAM" class="headerlink" title="2. Stacked PAM"></a>2. Stacked PAM</h3><p>主要用來管理使用者密碼，使用者的登入(驗證)與密碼修改的操作都會透過Stacked PAM進行。<br>其中，remote(LDAP) user會呼叫pam_autoenticate()與pam_chauthtok()兩個API來進行驗證與修改密碼的操作。</p><p>密碼使用one-way hash(SHA512)，不過由於IPMI使用設定不同，因此在IPMI group中的使用者密碼會另外加密保存(Cipher:AES-128-CBC, Digest-SHA256 whth HMAC)。</p><p>在Stacked PAM中有三個主要的modules：</p><ol><li><p>pam_tally2.so<br>主要用來handle登入失敗的狀況。</p></li><li><p>pam_unix.so<br>主要用來進行local user的驗證。</p></li><li><p>nss_pam_ldap.so<br>如果loacal的驗證失敗，則會嘗試LDAP的登入，<br>此module就是用來處理remote的驗證。</p></li></ol><p>問：有沒有API提供設定優先使用LDAP驗證，省去local驗證的時間？<br>答：的確如果有相同使用者名稱分別在LDAP與local的狀況下會有這個需求，<br>不過目前沒有API可以設定，但可以透過configuration設定。</p><p>在更新密碼的操作則會包含下列流程：</p><ol><li>使用pam_chauthtok()來設定或修改密碼。</li><li>pam_cracklib會檢查密碼長度是否符合要求。</li><li>pam_pwhistory檢查密碼歷史紀錄是否符合。</li><li>pam_unit會計算加密(SHA)的密碼。</li><li>如果user屬於ipmi group，此時會在pam_ipmisave處理；<br>若原先不屬於ipmi group，經過設定之後增加進入ipmi group時也會在這邊進行處理。</li></ol><h3 id="設定檔"><a href="#設定檔" class="headerlink" title="設定檔"></a>設定檔</h3><p>Authentication PAM Configuration: &#x2F;etc&#x2F;pam.d&#x2F;common-auth<br>這個檔案可以改變auth的順序</p><p>Password Update PAM Configuration: &#x2F;etc&#x2F;pam.d&#x2F;common-password</p><h2 id="驗證流程"><a href="#驗證流程" class="headerlink" title="驗證流程"></a>驗證流程</h2><p>整個流程如下圖所示(不包含IPMI)<br><img src="/ChrisComplete/img/openbmc-authorization-flow.png"></p><h2 id="支援的方法"><a href="#支援的方法" class="headerlink" title="支援的方法"></a>支援的方法</h2><p>整理驗證與介面之間的支援度，參考下表：<br><img src="/ChrisComplete/img/openbmc-methods.png"></p><h2 id="其他補充"><a href="#其他補充" class="headerlink" title="其他補充"></a>其他補充</h2><p>在local.conf.sample設定檔中可以設定預設密碼</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>程式設計</category>
+      
+      <category>OpenBMC</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>OpenBMC</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>JavaScript奇技淫巧</title>
     <link href="/ChrisComplete/2022/08/14/Javascript-Trick/"/>
     <url>/ChrisComplete/2022/08/14/Javascript-Trick/</url>
