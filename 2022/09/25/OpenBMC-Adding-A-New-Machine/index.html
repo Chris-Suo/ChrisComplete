@@ -1,0 +1,724 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/ChrisComplete/img/fluid.png">
+  <link rel="icon" href="/ChrisComplete/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Chris Suo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="前言此系列文是參考OpenBMC官方Youtube頻道的學習筆記，相關投影片可以由OpenBMC GitHub的wiki頁面取得。 基礎知識這邊假設讀者已經具備下面列出的一些基礎知識：  BMC硬體：要執行BMC的硬體環境。 Linux Kernel 嵌入式Linux開發 (C&#x2F;C++程式語言) IPMI D-Bus Yocoto  Machine Layers要建立新的機器，或者理解為">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenBMC: Adding a New Machine">
+<meta property="og:url" content="https://chris-suo.github.io/ChrisComplete/2022/09/25/OpenBMC-Adding-A-New-Machine/index.html">
+<meta property="og:site_name" content="Chris Complete">
+<meta property="og:description" content="前言此系列文是參考OpenBMC官方Youtube頻道的學習筆記，相關投影片可以由OpenBMC GitHub的wiki頁面取得。 基礎知識這邊假設讀者已經具備下面列出的一些基礎知識：  BMC硬體：要執行BMC的硬體環境。 Linux Kernel 嵌入式Linux開發 (C&#x2F;C++程式語言) IPMI D-Bus Yocoto  Machine Layers要建立新的機器，或者理解為">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://chris-suo.github.io/ChrisComplete/img/openbmc-machine-layer.png">
+<meta property="article:published_time" content="2022-09-25T07:06:53.000Z">
+<meta property="article:modified_time" content="2023-03-27T13:54:12.116Z">
+<meta property="article:author" content="Chris Suo">
+<meta property="article:tag" content="OpenBMC">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://chris-suo.github.io/ChrisComplete/img/openbmc-machine-layer.png">
+  
+  
+  
+  <title>OpenBMC: Adding a New Machine - Chris Complete</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/ChrisComplete/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/ChrisComplete/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/ChrisComplete/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"chris-suo.github.io","root":"/ChrisComplete/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/ChrisComplete/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/ChrisComplete/js/utils.js" ></script>
+  <script  src="/ChrisComplete/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 40vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/ChrisComplete/">
+      <strong>Chris Complete</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/ChrisComplete/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/ChrisComplete/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/ChrisComplete/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/ChrisComplete/img/post.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="OpenBMC: Adding a New Machine"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-09-25 15:06" pubdate>
+          September 25, 2022 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.6k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          39 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">OpenBMC: Adding a New Machine</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>此系列文是參考OpenBMC官方<a target="_blank" rel="noopener" href="https://www.youtube.com/channel/UC7uaW4PyzmougoMPgh7taOw">Youtube頻道</a>的學習筆記，<br>相關投影片可以由OpenBMC GitHub的<a target="_blank" rel="noopener" href="https://github.com/openbmc/openbmc/wiki/Presentations#openbmc-learning-series2020">wiki頁面</a>取得。</p>
+<h2 id="基礎知識"><a href="#基礎知識" class="headerlink" title="基礎知識"></a>基礎知識</h2><p>這邊假設讀者已經具備下面列出的一些基礎知識：</p>
+<ol>
+<li>BMC硬體：要執行BMC的硬體環境。</li>
+<li>Linux Kernel</li>
+<li>嵌入式Linux開發 (C&#x2F;C++程式語言)</li>
+<li>IPMI</li>
+<li>D-Bus</li>
+<li>Yocoto</li>
+</ol>
+<h2 id="Machine-Layers"><a href="#Machine-Layers" class="headerlink" title="Machine Layers"></a>Machine Layers</h2><p>要建立新的機器，或者理解為開始一個新專案，需要先以組織為名稱建立專案庫(repository&#x2F;repo)。<br>例如組織名稱”abc”即建立名稱為：meta-abc的repo。<br>可以提出要求將這個repo加入OpenBMC的mail列表(Mailing List)中，與其他開發者共享。</p>
+<p>接著可以在這個repo中自行加入機器(Machine Layer)，例如：meta-xyz代表加入名為xyz的機器。<br>所有與機器有關的配置(Configuration)與Recipe(可以理解為平台上要使用的功能或Package)都放在個別機器的目錄下。</p>
+<p>根據機器需要，各別加入packagegroup，而每個機器可以針對不同的Recipe有自己特定的配置。</p>
+<p>下圖是一個範例：<br><img src="/ChrisComplete/img/openbmc-machine-layer.png" srcset="/ChrisComplete/img/loading.gif" lazyload></p>
+<p>範例中在meta-xyz(Machine Layer)中的conf目錄下定義了機器的配置，其中bblayers.conf.sample定義了一些外部的Recipe路徑(Discovery Path)。</p>
+<p>具體的配置檔在macine&#x2F;xyz.conf目錄下，可以在這個檔案中進行機器相關的系統配置(例如baud rate等)。</p>
+<p>接下來是一系列的Recipes Changes，每個應用功能都對應的一個Recipe，而在Recipes目錄下可以根據系統需求增加功能或覆蓋原先的設定。</p>
+<p>舉例來說，如果想要修改Linux Kernel可以在”recipes-kernel”中加入”bbappend”檔案，然後在”xyz.cfg”中自行加入需要的配置。</p>
+<h2 id="Kernel-Changes"><a href="#Kernel-Changes" class="headerlink" title="Kernel Changes"></a>Kernel Changes</h2><p>因為每個平台(Platform)在硬體配置上可能有不同的設計，也可能需要使用不同的驅動程式(Driver)，因此需要針對Linux Kernel的部分進行配置。<br>基本的像是裝置樹(Device Tree)，需要在目錄：arch&#x2F;arm&#x2F;boot&#x2F;dts進行修改，其名稱必需要是”aspeed-bmc-abc-xyz.dts”。<br>其他也可以根據需要新增自己的驅動程式。</p>
+<p>此外也可能因應Linux Kernel的升級(更新)，需要同步更新專案的Kernel。<br>OpenBMC使用Kernel的分歧為：linux-aspeed。<br>如果需要Patch修改到Linux Kernel官方(kernel.org)，要加入openBMC的Mailing List。</p>
+<h2 id="基礎功能"><a href="#基礎功能" class="headerlink" title="基礎功能"></a>基礎功能</h2><h3 id="Host-Power-Control"><a href="#Host-Power-Control" class="headerlink" title="Host Power Control"></a>Host Power Control</h3><p>有兩個package負責控制與監控電源狀態。</p>
+<ol>
+<li><p>Phosphor-state-manage<br>每一個操作(on&#x2F;off&#x2F;reset)需要有單獨的systemd，例如：obmc-chassis-poweroff@.target、obmc-chassis-poweron@.target等。</p>
+</li>
+<li><p>x86-power-control<br>主要針對Intel平台的電源控制，支援標準的操作(on&#x2F;off&#x2F;reset)，也支援Redfish。<br>他是利用libgpiod來實作，意思是需要在Kernel(Device Tree)中加入對應的GPIO設定，如果使用的名稱與標準的不一樣，可以透過配置檔將名稱傳入。<br>預設使用的名稱為：POWER_OUT、RESET_OUT等。<br>支援多個host，並且可以有個別的配置檔。</p>
+</li>
+</ol>
+<p>使用VIRTUAL-RUNTIME_obmc-host-state-manager來選擇要使用的package。</p>
+<h3 id="SoL-Serial-over-Lan"><a href="#SoL-Serial-over-Lan" class="headerlink" title="SoL (Serial over Lan)"></a>SoL (Serial over Lan)</h3><p>SoL提供遠端管理者可以用來看到主系統(Host System)上的終端機(Console)。<br>要啟用SoL可以將套件obmc-console加入專案。</p>
+<p>server.xx.conf可以用來進行配置要使用的UART Port，在Aspeed Chip上預設使用VUART Port。</p>
+<p>系統起來的時候會帶起一個obmc-console-server daemon，接下來就可以使用客戶端(obmc-console.client)去存取這個service。</p>
+<p>OpenBMC SoL也支援多個host在不同的UART Port上，不過要先設定enable-concurrent-servers這個flag，然後每個host需要加入自己各自的配置檔。</p>
+<h3 id="FRU"><a href="#FRU" class="headerlink" title="FRU"></a>FRU</h3><p>FRU其實就是一個Flash Memory，用來保存這個板子的資訊，包含Product Name、Part Number、Serial Number等。<br>並依照規範(IPMI)的格式來儲存這些資訊。</p>
+<p>有兩個package與這個功能有關：</p>
+<ol>
+<li><p>ipmi-fru-parser(phosphor-ipmi-fru)<br>這個package是用來修改讀取FRU的EEPROM路徑。</p>
+</li>
+<li><p>Entity Manager<br>這個package透過配置檔將一個FRU定義為一個一個fru-device的Entity，因此叫做Entity Manager。</p>
+</li>
+</ol>
+<p>他會將所有可讀取的EEPROM列出來，並且提供讀取操作，支援8bit與16bit的device，所有FRU device有提供D-Bus介面可以存取。</p>
+<p>問答有提到，Entity Manager有支援動態增加，不過需要先在Device Tree做好預先配置。</p>
+<h3 id="Sensors"><a href="#Sensors" class="headerlink" title="Sensors"></a>Sensors</h3><p>此部分影片漏講，剛好投影片被跳過，因此下面的內容單純從投影片整理。</p>
+<p>兩個與Sensor相關的package</p>
+<ol>
+<li><p>phosphor-hwmon<br>透過sensor配置檔指定每個sensor讀取的方式。</p>
+</li>
+<li><p>dbus-sensors<br>有不同的daemon來提供不同類型的sensor，例如：hwmon、fan、cpu、ipmb、與psu等。</p>
+</li>
+</ol>
+<p>透過D-Bus讀取配置檔，在執行期間(Runtime)時根據每個種類來偵測Sensor。</p>
+<p>監控Sensor後會根據配置檔設定的threshold來判斷是否超標，所有Sensor需要在Entity Manager的配置檔中進行配置。</p>
+<h3 id="Fan-Control"><a href="#Fan-Control" class="headerlink" title="Fan Control"></a>Fan Control</h3><p>系統也會需要根據溫度Sensor的讀值來控制風扇轉速。</p>
+<p>phosphor-fan-presence與phosphor-pid-control兩個package可以用來進行與風扇相關的配置，設定virtual-obmc-fan-mgmt來指定要使用的package。</p>
+<p>phosphor-pid-control有兩種配置方法</p>
+<ol>
+<li><p>透過Json檔<br>以Json檔各別設定每個sensor與風扇轉速之間的控制關係。</p>
+</li>
+<li><p>透過Entity Manager<br>需要設定enable-configure-dbus來指定使用Entity Manager，再自行加入風扇控制的設定檔。</p>
+</li>
+</ol>
+<h3 id="IPMI-In-Band"><a href="#IPMI-In-Band" class="headerlink" title="IPMI (In Band)"></a>IPMI (In Band)</h3><p>IPMI是很基礎的功能，主要用來與BMC進行溝通。</p>
+<p>主要的package是phosphor-host-ipmid，可以設定obmc-host-ipmi-hw為phosphor-ipmi-kcs或phosphor-ipmi-bt來<br>指定使用KCS或BT介面來與host溝通。</p>
+<p>使用時需要對每個機器指定一個ID：recpise-phosphor&#x2F;ipmi&#x2F;phosphor-ipmi-config&#x2F;dev_id.json</p>
+<p>支援標準IPMI指令，如果需要增加自己的OEM指令，可以透過增加&#x2F;修改ipmi-providers library，也可以覆寫(Override)標準的指令。<br>如果需要增加自己的OEM Library需要建立自己的repo。</p>
+<p>這邊有幾個OEM Specific IPMI repo的例子：intel-ipmi-oem、fb-ipmi-oem</p>
+<h3 id="IPMB"><a href="#IPMB" class="headerlink" title="IPMB"></a>IPMB</h3><p>另一個常見的介面是IPMB，可以加入phosphor-ipmi-ipmb來啟用。<br>支援”ipmb”與”ME”兩個通道(Channel)。</p>
+<p>支援多個裝置共用ipmb&#x2F;ME通道。</p>
+<p>需要在Device Tree中為每個裝置加入ipmb-dev kernel driver，並為每個裝置加入設定檔：recipes-phosphor&#x2F;ipmi&#x2F;phosphor-ipmi-ipmb&#x2F;ipmb-channels.json</p>
+<h3 id="FW-Upgrade"><a href="#FW-Upgrade" class="headerlink" title="FW Upgrade"></a>FW Upgrade</h3><p>根據不同支援的裝置啟用不同的package來啟用FW更新，例如：</p>
+<ol>
+<li>phosphor-psu-software-manager：PSU</li>
+<li>phosphor-software-manager：BMC&#x2F;Host BIOS</li>
+</ol>
+<p>建構(Build)完的印象檔(image)位置在：$(build)&#x2F;tmp&#x2F;deploy&#x2F;image&#x2F;$machine&#x2F;*.mtd.tar<br>BIOS則需要透過工具(genBiosTar)進行轉換，預設轉換後的檔案名稱為：obmc-bios-tar.gz</p>
+<p>不同的平台可能有不同的更新流程，例如要先操作GPIO或考慮如何分配Flash空間，這些可以透過obmc-flash-host-bios@.service檔案來設定執行對應的指令。</p>
+<p>更新流程大至如下：</p>
+<ol>
+<li>透過scp指令將印象檔放到BMC上(&#x2F;tmp&#x2F;images)。</li>
+<li>之後系統會產生一個image ID(&#x2F;tmp&#x2F;images&#x2F;xxxx)。</li>
+<li>接下來執行：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">busctl set-property xyz.openbmc_project.Software.BMC.pdater /xyz/openbmc_project/software/XXXX<br>xyz.openbmc_project.Software.Activation RequestedActivation s<br>xyz.openbmc_porject.Software.Activation.RequestedActivations.Active<br></code></pre></td></tr></table></figure></li>
+<li>若是更新BMC，最後需要進行重啟讓設定生效。</li>
+</ol>
+<p>也可以透過Redfish指令進行更新：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">curl -k -H <span class="hljs-string">&quot;X-Auth-Token: <span class="hljs-variable">$token</span>&quot;</span> -H <span class="hljs-string">&quot;Content-Type: application/octet-stream&quot;</span> -X POST -T &lt;image&gt; https://<span class="hljs-variable">$&#123;bmc&#125;</span>/redfish/v1/UpdateService<br></code></pre></td></tr></table></figure>
+
+<h3 id="Other-Features"><a href="#Other-Features" class="headerlink" title="Other Features"></a>Other Features</h3><p>還有其他功能例如：</p>
+<ol>
+<li>Entity Manager</li>
+<li>Redfish</li>
+<li>IPMI(Out of Band)</li>
+<li>BMCWeb</li>
+<li>WebUI</li>
+<li>Network-manager</li>
+<li>GPIO Monitor</li>
+<li>SEL log</li>
+<li>Host console log</li>
+<li>NVME</li>
+<li>Post code management</li>
+</ol>
+<h2 id="Continuous-Integration"><a href="#Continuous-Integration" class="headerlink" title="Continuous Integration"></a>Continuous Integration</h2><p>利用CI可以早期將可能導致系統壞掉的commit發現並修正。<br>參考：<a target="_blank" rel="noopener" href="https://github.com/openbmc/openbmc/wiki/Continuous-Integration">https://github.com/openbmc/openbmc/wiki/Continuous-Integration</a></p>
+<p>OpenBMC的<a target="_blank" rel="noopener" href="https://github.com/openbmc/openbmc-build-script/blob/master/build-setup.sh">建構腳本(Build Script)</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/ChrisComplete/categories/%E7%A8%8B%E5%BC%8F%E8%A8%AD%E8%A8%88/" class="category-chain-item">程式設計</a>
+  
+  
+    <span>></span>
+    
+  <a href="/ChrisComplete/categories/%E7%A8%8B%E5%BC%8F%E8%A8%AD%E8%A8%88/OpenBMC/" class="category-chain-item">OpenBMC</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/ChrisComplete/tags/OpenBMC/">#OpenBMC</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>OpenBMC: Adding a New Machine</div>
+      <div>https://chris-suo.github.io/ChrisComplete/2022/09/25/OpenBMC-Adding-A-New-Machine/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Chris Suo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>September 25, 2022</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>Licensed under</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/ChrisComplete/2022/10/01/OpenBMC-Note/" title="OpenBMC學習筆記">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">OpenBMC學習筆記</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/ChrisComplete/2022/09/24/OpenBMC-User-Management/" title="OpenBMC: User Management">
+                        <span class="hidden-mobile">OpenBMC: User Management</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/ChrisComplete/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.7.2/gitalk.min.js', function() {
+        var options = Object.assign(
+          {"clientID":"f1123deada6ef69bc3fc","clientSecret":"2e6832b420ba87dbc43d9f4b089651975ac16e21","repo":"ChrisComplete","owner":"Chris-Suo","admin":["Chris-Suo"],"language":"en","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
+          {
+            id: '3dd5828feb3f9f00c8ab30004ba8bee5'
+          }
+        )
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       Copyright © 2022 Chris. All rights reserved.<br/> This blog is made by <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a><br/> Theme is <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/ChrisComplete/js/events.js" ></script>
+<script  src="/ChrisComplete/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/ChrisComplete/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/ChrisComplete/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/ChrisComplete/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,749 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/ChrisComplete/img/fluid.png">
+  <link rel="icon" href="/ChrisComplete/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Chris Suo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="前言這篇是紀錄在Coursera上的開放課程：”From Nand to Tetris”的學習筆記，本課程由Hebrew大學的Noam Nisan與Shimon Schocken兩位教授主講，課程內容是透過實作(由nand邏輯閘開始)，來建構一個電腦系統。 Chapter 1. Introduction關於一台電腦如何運作，一般程式語言關心能做什麼(What)，不用理解如何做到(How)。而How">
+<meta property="og:type" content="article">
+<meta property="og:title" content="From Nand to Tetris">
+<meta property="og:url" content="https://chris-suo.github.io/ChrisComplete/2022/08/28/nand2tetris/index.html">
+<meta property="og:site_name" content="Chris Complete">
+<meta property="og:description" content="前言這篇是紀錄在Coursera上的開放課程：”From Nand to Tetris”的學習筆記，本課程由Hebrew大學的Noam Nisan與Shimon Schocken兩位教授主講，課程內容是透過實作(由nand邏輯閘開始)，來建構一個電腦系統。 Chapter 1. Introduction關於一台電腦如何運作，一般程式語言關心能做什麼(What)，不用理解如何做到(How)。而How">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-08-28T04:57:56.000Z">
+<meta property="article:modified_time" content="2023-03-27T13:55:33.895Z">
+<meta property="article:author" content="Chris Suo">
+<meta property="article:tag" content="System">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>From Nand to Tetris - Chris Complete</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/ChrisComplete/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/ChrisComplete/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/ChrisComplete/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"chris-suo.github.io","root":"/ChrisComplete/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/ChrisComplete/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/ChrisComplete/js/utils.js" ></script>
+  <script  src="/ChrisComplete/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 40vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/ChrisComplete/">
+      <strong>Chris Complete</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/ChrisComplete/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/ChrisComplete/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/ChrisComplete/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/ChrisComplete/img/post.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="From Nand to Tetris"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-08-28 12:57" pubdate>
+          August 28, 2022 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          6.9k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          58 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">From Nand to Tetris</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>這篇是紀錄在Coursera上的開放課程：”From Nand to Tetris”的學習筆記，本課程由Hebrew大學的Noam Nisan與Shimon Schocken兩位教授主講，課程內容是透過實作(由nand邏輯閘開始)，來建構一個電腦系統。</p>
+<h2 id="Chapter-1-Introduction"><a href="#Chapter-1-Introduction" class="headerlink" title="Chapter 1. Introduction"></a>Chapter 1. Introduction</h2><p>關於一台電腦如何運作，一般程式語言關心能做什麼(What)，不用理解如何做到(How)。<br>而How指的是實作(Implmentation)，What則是抽象化(Abstraction)的過程。</p>
+<p>透過不斷抽象化，我們可以像堆積木一樣將功能堆疊出來，而不用去在乎每一層是如何實作。</p>
+<p>大體來說本課程分為兩個部分：軟體架構(Software Hierarchy)與硬體平台(Hardware Platform)</p>
+<p>從硬體開始，由最nand邏輯閘開始一步步建構每一層，直到組建一個可以運行應用程式的系統，這邊稱為Hack，過程中使用模擬器(Simulator)進行硬體模擬。</p>
+<p>第二部分基於前面的Hack系統，由於系統目前只能接受低階的組合語言(Assembly Lauguage)，使用上不太方便，因此我們透過建造編譯器(Compiler)，創造這個系統的高階程式語言(High Level Language)，稱為Jack。<br>進一步可以透過這個語言組建相關的標準函式庫(Standard Library)與作業系統(Operating System)</p>
+<h2 id="Chapter-2-Boolean-Functions-and-Gate-Logic"><a href="#Chapter-2-Boolean-Functions-and-Gate-Logic" class="headerlink" title="Chapter 2. Boolean Functions and Gate Logic"></a>Chapter 2. Boolean Functions and Gate Logic</h2><p>電腦使用布林值(boolean)進行運算，布林值的值域為0或1(開或關)。<br>常見的布林運算(Boolean Operations)：and&#x2F;or&#x2F;not<br>布林表達式(Boolean Expressions)就是以布林值與布林運算組成的式子，例如：<br>1 AND (0 OR (NOT (1))) &#x3D; 1 AND (0 OR 0) &#x3D; 1 AND 0 &#x3D; 0</p>
+<p>布林函式(Boolean Functions)的例子：f(x, y, z) &#x3D; (x AND y) OR (NOT(x) AND z)<br>其中等號後面的式子(formula)就是函式內容。</p>
+<p>簡化或計算(Evaluate)函式的方法可以透過列真值表(Truth Table)，或者使用布林代數(Boolean Algebra)的一些特性，例如：布林恆等式(Boolean Identities)。</p>
+<p>下面是幾種恆等式的定律：</p>
+<ol>
+<li><p>交換率(Commutative Laws)<br>(x AND y) &#x3D; (y AND x)<br>(x OR y) &#x3D; (y OR x)</p>
+</li>
+<li><p>關聯(Associative Laws)<br>(x AND (y AND z)) &#x3D; ((x AND y) AND z)<br>(x OR (y OR z)) &#x3D; ((x OR y) OR z)</p>
+</li>
+<li><p>分配律(Distributive Laws)<br>(x ADN (y OR z)) &#x3D; (x AND y) OR (x AND z)<br>(x OR (y AND z)) &#x3D; (x OR y) AND (x OR z)</p>
+</li>
+<li><p>狄摩根定律(De Morgan Laws)<br>NOT(x AND y) &#x3D; NOT(x) OR NOT(y)<br>NOT(x OR y) &#x3D; NOT(x) AND NOT(y)</p>
+</li>
+</ol>
+<p>布林代數簡化的例子：<br>NOT(NOT(x) AND NOT(x OR y))<br>&#x3D; NOT(NOT(x) AND (NOT(x) AND NOT(y))) &#x2F;&#x2F; De Morgan Law<br>&#x3D; NOT((NOT(x) AND NOT(x)) AND NOT(y)) &#x2F;&#x2F; Associative Law<br>&#x3D; NOT(NOT(x) AND NOT(y)) &#x2F;&#x2F; Idempotence<br>&#x3D; NOT(NOT(x)) OR NOT(NOT(y)) &#x2F;&#x2F; De Morgan Law<br>&#x3D; x OR y &#x2F;&#x2F; Double Negation</p>
+<p>實際上在設計邏輯電路時，我們更需要的是將真值表轉換為布林表達式，<br>我們會設計電路上的輸入與輸出，但如何轉換或建構(Construct)成對應的邏輯閘就是一個問題。</p>
+<p>這邊是一個例子，假設有一張真值表：</p>
+<table>
+<thead>
+<tr>
+<th>x</th>
+<th>y</th>
+<th>z</th>
+<th>f</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+</tr>
+</tbody></table>
+<p>我們實際上只需要關心輸出為1的部分，即：<br>(NOT(x) AND NOT(y) AND NOT(z))<br>OR<br>(NOT(x) AND y AND NOT(z))<br>OR<br>(x AND NOT(y) AND NOT(z))</p>
+<p>這個式子可以簡化為：NOT(z) AND (NOT(x) OR NOT(y))</p>
+<p>目前沒有一個演算法可以有效的進行化簡，事實上這個問題是一個NP-Hard Problem。</p>
+<p>一個重要的定理是：任何布林函式都可以使用AND&#x2F;OR&#x2F;NOT運算來表達。<br>因此只要使用NAND邏輯閘即可表示任何布林函式。<br>NOT(x) &#x3D; x NAND x<br>x AND y &#x3D; NOT(x NAND y)<br>x OR y &#x3D; NOT(NOT(x) AND NOT(y))</p>
+<p>邏輯閘(Logic Gate)：用來實作布林函式的硬體裝置。</p>
+<p>電路實現(Circuit Implementations)：<br>如果想要也可以透過電路的方式實作邏輯閘，將AND gate類比於電路的話，就類似串連，OR gate則是並聯。</p>
+<p>Hardware Description Language (HDL)：<br>我們可以用一種高階語言對邏輯閘進行描述，這種方式可以方便地進行模擬。</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs verilog">CHIP Xor&#123;<br>	<span class="hljs-comment">// interface</span><br>	IN a, b;<br>	OUT out;<br><br>	<span class="hljs-comment">// implementation</span><br>	Not(in=a, out=nota);<br>	Not(in=b, out=notb);<br>	And(a=a, b=notb, out=aAndNotb);<br>	And(a=nota, b=b, out=notaAndb);<br>	Or(a=aAndNotb, b=notaAndb, out=out);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>Multi-bit Buses：<br>可以用類似陣列的寫法來表示bus，例如：a[16]代表16個bit寬的bus。<br>此外支援overlap的寫法，例如：a[16], out[0..10]&#x3D;a<br>可以透過ture&#x2F;false來設定bus中所有bit為1或0。</p>
+<h2 id="Chapter-3-Boolean-Arithmetic-and-the-ALU"><a href="#Chapter-3-Boolean-Arithmetic-and-the-ALU" class="headerlink" title="Chapter 3. Boolean Arithmetic and the ALU"></a>Chapter 3. Boolean Arithmetic and the ALU</h2><p>如何使用boolean值來代表一個數字(number)，這邊說明基本的二進制轉換。<br>以k個bit為例，最大值可表示2^k-1，但需要保留一半的範圍表示負數(MSB為1的部分)。 </p>
+<p>數值加法：<br>數值加法運算是透過”加法器(adder)”的硬體完成，而加法器則是由”全加器(Full Adder)”組成，兩個”半加器(Half Adder)”可以組成一個全加器。</p>
+<p>課程使用的加法器定義如下：<br>Half Adder: add two bits output sum and carry<br>Full Adder: add three bits(with carry)<br>最後組成16-bit Adder</p>
+<p>負數表示：<br>使用2補數(2’s complement)以避免-0的問題，原理是透過模數(modulo)，由-1+1捨棄最高位後等於從0開始循環。</p>
+<p>而減法等於加上一個負數，因此數值減法可以透過加法器實現。</p>
+<p>如何計算2補數：<br>假設計算-x，由於是modulo，可以理解成計算：2^n-x<br>&#x3D; 1+(2^n-1) - x<br>而其中(2^n-1)為全為1的值，例如1111，將其減去x等於對每個bit作翻轉<br>最後加一。<br>加一的部分可以當作從右邊到左邊，將所有bit翻轉直到第一次翻轉0到1。</p>
+<p>Arithmetic Logic Unit (ALU)：<br>本節的課程作業為實作一個簡單的ALU。</p>
+<h2 id="Chapter-4-Memory"><a href="#Chapter-4-Memory" class="headerlink" title="Chapter 4. Memory"></a>Chapter 4. Memory</h2><p>目前我們都沒有考慮關於”時間”，我們假設這些邏輯閘設定一個輸入就馬上產生對應的輸出，<br>然而實際上，在真實世界中我們需要考慮”時間”。</p>
+<p>關於時間有三個問題可以考慮：<br>1.我們希望可以重複利用硬體：例如for迴圈。<br>2.我們希望硬體可以紀錄狀態：例如記錄總和。<br>3.執行速度</p>
+<p>實際上為了確保邏輯閘的正確性，會使用時脈(Clock)來同步訊號。</p>
+<p>如果邏輯閘的輸出只與當時的輸入有關，這類的邏輯閘稱為”Time-independent Logic”或者”Combinational Logic”。<br>相對應的，如果輸出與前一個時間(上一個clock)的狀態有關，這類的邏輯閘稱為”Sequential Logic”。</p>
+<p>Flip Flops：<br>透過使用Flip Flops這樣的元件，可以做到紀錄”狀態”，從而建構記憶體之類的Sequential Logic元件。</p>
+<p>Memory：<br>記憶單元可以指多個部分，包含主記憶體、次級記憶體、揮發性&#x2F;非揮發性記憶體等…<br>本課程關心的是邏輯層面上的主記憶體(RAM)。<br>Main Memory： RAM<br>Secondary Memory： Disks<br>Volatile&#x2F;non-volatile Memory</p>
+<p>Register：<br>暫存器是最基礎的記憶單元，本課程使用16-bit寬的暫存器。</p>
+<p>Counter：<br>計數器可以用來指引要執行的指令。<br>一個計數器需要提供至少三種功能：Reset(設定為0)、Next(加一)、以及Goto(指定)。</p>
+<h2 id="Chapter-5-Machine-Language"><a href="#Chapter-5-Machine-Language" class="headerlink" title="Chapter 5. Machine Language"></a>Chapter 5. Machine Language</h2><p>大多數的裝置只能完成單一的任務，例如洗碗機只負責洗碗，但是像電腦、手機(也算是電腦的一種)這類裝置，可以單靠同樣的硬體完成不同的工作。</p>
+<p>電腦最早可以追朔到由Alan Turing提出的概念：圖靈機。<br>他發現雖然有許多圖靈機，但其中有一種可以在給定正確的程式下執行各種任務(即：通用圖靈機)。</p>
+<p>而Von Neumann是最早的電腦實作者，透過將軟體放入硬體中，用來控制硬體的各種運作，實作各種功能，成為現代電腦最早的雛形。</p>
+<p>要了解通用電腦，解開祕密的原理就在於存在於電腦系統記憶體裡的程式，硬體是固定的，但是軟體可以改變，程式其實就是一連串的指令，不同的指令與順序就可以組合出不同的功能。</p>
+<p>指令的幾個元素：<br>第一個元素是operation：這個指令是做什麼樣的運算？<br>第二是元素是program counter：我們怎麼知道何時執行什麼指令？<br>第三是元素是addressing: 指令執行的對象？運算元在哪？要存到哪？</p>
+<p>Compilation<br>目前描述的程式對硬體來說很容易，但是對人類閱讀就不太方便，因此現實上人不會直接撰寫machine language，而是寫高階語言(high level language)再透過編譯器(compiler)將高階語言轉換成機器語言。</p>
+<p>機器語言是一串二進位數值，難以閱讀，為了方便起見會將一些指令給一個註記詞，例如“add”來取代“011000”，相同的，register可以用r2, r3等註記詞來表示。</p>
+<p>關於這種symbolic有兩種看法(或解釋interpretation)：</p>
+<ol>
+<li>symbolic form實際上不存在，只是為了方便人類記憶用(現階段)</li>
+<li>可以進一步 實際撰寫assembly language，再透過組譯器(assembler)將組合語言轉換為機器語言</li>
+</ol>
+<p>另一件事情需要留意的是symbols。<br>有時候我們需要指定記憶體位置，但位置對人類來說只是數字沒有意義也不方便記憶，這時候可以透過組譯器的幫助，建立一個用來替代的符號(symbolic symbol)，例如記憶體位置129 (mem[129])我們可以用一個index的符號來表示。</p>
+<p>機器語言的基本元素<br>定義一個機器語言需要考量三個方面：</p>
+<ol>
+<li>機器語言是硬體與軟體之間的一個介面</li>
+<li>通常與實際的硬體架構有關</li>
+<li>最後要考慮的是cost-performance之間的取捨(tradeoff)</li>
+</ol>
+<p>機器支援的運算<br>機器語言支援幾種不同類型的運算，例如算術運算、邏輯運算、流程控制，另外也要考慮支援的資料型別，有些系統支援更豐富的資料型別，例如：浮點數。</p>
+<p>下一個議題是定址(addressing)，我們要如何決定什麼資料用來進行運算？如何取得資料？</p>
+<p>記憶體階層(Memory Hierarchy)<br>支援存取的記憶體越大則需要的定址線越多，花費的時間也越多，反之，若希望存取速度加快就必須犧牲大小。<br>一種折衷的解法就是採用記憶體階層(memory hierarchy)，用較小的記憶體(cache)換取較快的存取速度，離CPU越遠則大小越大，但花費時間較多(記憶體memory、硬碟disk)。<br>通常CPU內部都有包含暫存器，機器語言主要操作的對象也是暫存器，暫存器也與記憶體之間有一定的映射關係，可以將操作玩的暫存器內容保存回記憶體。<br>回到一開始的問題，如何決定什麼資料進行運算？有四種可能或者四種定址模式(addressing mode)：<br>暫存器(Register)：操作的對象為暫存器，add R1, R2<br>直接定址(Direct)：可以直接操作記憶體，add R1, M[200]<br>間接定址(Indirect)：暫存器保存的是記憶體位置，add R1,@A<br>立即值(Immediate)：在運算過程中直接定義數值，add 73,R1</p>
+<p>輸入與輸出<br>一般來說輸入&#x2F;輸出裝置會映射到記憶體的某個區段，系統的驅動程式會知道如何透過這個記憶體區段與裝置進行溝通。</p>
+<p>流程控制<br>通常CPU是循序執行，不過有時候我們可能需要調整執行順序，例如進行迴圈，jump指令用來進行無條件轉跳(unconditional jump)，另外也有條件式轉跳(conditional jump)。</p>
+<p>Hack電腦與機器語言<br>Hack的硬體部分包含(16-bit)：指令記憶體(ROM, instruction memory)、CPU與資料記憶體(DAM, data memory)、總線(instruction bus&#x2F;data bus&#x2F;address bus)。</p>
+<p>軟體的部分包含：16-bit A類型的指令(A-instructions)、與C類型的指令(C-instructions)。</p>
+<p>控制(Control)：只有一個重置按鈕(reset button)。</p>
+<p>整個程式執行流程如下：<br>1.將program讀取至ROM<br>2.按下reset button<br>3.程式開始執行</p>
+<p>其他部分：<br>3種暫存器：D: 16-bit value &#x2F; A(address): 16-bit資料或位置 &#x2F; M:在RAM內部，16-bit RAM暫存器位置，用來選取記憶體中的資料。</p>
+<p>A-instruction<br>syntax: @value<br>example: @21<br>設定A暫存器內容為21<br>且 RAM[21]為選取的暫存器(M)<br>usage example:<br>&#x2F;&#x2F;set RAM[100] to -1<br>@100 &#x2F;&#x2F; A&#x3D;100<br>M&#x3D;-1 &#x2F;&#x2F;RAM[100]&#x3D;-1</p>
+<p>C-instruction<br>dest &#x3D; comp ; jump &#x2F;&#x2F; dest,jump為選擇性參數<br>comp可以是：0, 1, -1, D, A, !D, !A, …<br>dest可以是：null, M, D, MD, A, AM, AD, AMD<br>jump可以是：null, JGT, JEQ, JGE, JLT, JNE, JLE, JMP<br>如果jump與comp比較後等於0則跳躍到ROM[A]</p>
+<p>先進行comp的運算<br>將結果保存於dest<br>若(comp jump 0)的結果為真，則跳躍到ROM[A]<br>Example:<br>&#x2F;&#x2F; Set the D register to -1<br>D&#x3D;-1</p>
+<p>&#x2F;&#x2F; Set RAM[300] to value of the value of the D register minus 1<br>@300<br>M&#x3D;D-1</p>
+<p>&#x2F;&#x2F; if (D-1&#x3D;&#x3D;0) jump to excute the instruction stored in ROM[56]<br>@56<br>D-1;JEQ</p>
+<p>Hack語言規格<br>你可以使用兩種方式撰寫Hack語言：</p>
+<ol>
+<li>Symbolic</li>
+<li>Binary</li>
+</ol>
+<p>例如A-instruction的symbolic與binary格式分別為：<br>@21、0000000000010101(0開頭為a-instruction)</p>
+<p>而C-instruction</p>
+<p>dest &#x3D; comp; jump<br>1 1 1 a c1 c2 c3 c4 c5 c6 d1 d2 d3 j1 j2 j3<br>(opcode: 1 bit)(not used: 2 bits)(comp bits: 7 bits)(dest bits: 3 bits)(jump bits: 3 bits)</p>
+<p>使用symbolic需要再透過assembler轉換為binary的格式才能夠執行。</p>
+<p>輸入與輸出<br>I&#x2F;O裝置可以用來接收使用者的輸入資料，或顯示資料給使用者。</p>
+<p>輸出(螢幕)：<br>會有一塊記憶體(Screen Memory Map)對應到實體記憶體，當更新這塊記憶體，就會對應的更新螢幕上顯示的內容。<br>本課程使用的顯示大小高寬為256*512。<br>由於螢幕寬度為512，一個word為16bit</p>
+<h2 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h2><p><a target="_blank" rel="noopener" href="https://www.nand2tetris.org/">官方網站</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/ChrisComplete/categories/%E7%A8%8B%E5%BC%8F%E8%A8%AD%E8%A8%88/" class="category-chain-item">程式設計</a>
+  
+  
+    <span>></span>
+    
+  <a href="/ChrisComplete/categories/%E7%A8%8B%E5%BC%8F%E8%A8%AD%E8%A8%88/%E9%96%B1%E8%AE%80%E7%AD%86%E8%A8%98/" class="category-chain-item">閱讀筆記</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/ChrisComplete/tags/System/">#System</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>From Nand to Tetris</div>
+      <div>https://chris-suo.github.io/ChrisComplete/2022/08/28/nand2tetris/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Chris Suo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>August 28, 2022</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>Licensed under</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/ChrisComplete/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.7.2/gitalk.min.js', function() {
+        var options = Object.assign(
+          {"clientID":"f1123deada6ef69bc3fc","clientSecret":"2e6832b420ba87dbc43d9f4b089651975ac16e21","repo":"ChrisComplete","owner":"Chris-Suo","admin":["Chris-Suo"],"language":"en","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
+          {
+            id: '1d150218782753ff4d4c22448aa38bfe'
+          }
+        )
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       Copyright © 2022 Chris. All rights reserved.<br/> This blog is made by <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a><br/> Theme is <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/ChrisComplete/js/events.js" ></script>
+<script  src="/ChrisComplete/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/ChrisComplete/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/ChrisComplete/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/ChrisComplete/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
