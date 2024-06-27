@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <url>
+    <loc>https://chris-suo.github.io/ChrisComplete/2024/02/24/Taiwan-Roundabout/</loc>
+    
+    <lastmod>2024-02-25</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://chris-suo.github.io/ChrisComplete/2023/04/16/DesigningYourLife/</loc>
+    
+    <lastmod>2023-12-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://chris-suo.github.io/ChrisComplete/2023/12/28/Self-Mastery/</loc>
+    
+    <lastmod>2023-12-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://chris-suo.github.io/ChrisComplete/2023/09/04/Sanxia/</loc>
+    
+    <lastmod>2023-09-06</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://chris-suo.github.io/ChrisComplete/2022/06/19/PHP-CURL-Programming/</loc>
+    
+    <lastmod>2023-08-02</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://chris-suo.github.io/ChrisComplete/2023/04/09/Matsu/</loc>
+    
+    <lastmod>2023-04-16</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://chris-suo.github.io/ChrisComplete/2022/10/01/OpenBMC-Note/</loc>
+    
+    <lastmod>2023-03-27</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://chris-suo.github.io/ChrisComplete/about/index.html</loc>
+    
+    <lastmod>2023-03-27</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://chris-suo.github.io/ChrisComplete/2022/07/02/Git-Submodule-Update/</loc>
+    
+    <lastmod>2023-03-27</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://chris-suo.github.io/ChrisComplete/2022/08/14/Javascript-Trick/</loc>
+    
+    <lastmod>2023-03-27</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://chris-suo.github.io/ChrisComplete/2022/06/21/Json-c-Usage/</loc>
+    
+    <lastmod>2023-03-27</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://chris-suo.github.io/ChrisComplete/2022/09/25/OpenBMC-Adding-A-New-Machine/</loc>
+    
+    <lastmod>2023-03-27</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://chris-suo.github.io/ChrisComplete/2022/06/22/Libcurl-Usage/</loc>
+    
+    <lastmod>2023-03-27</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://chris-suo.github.io/ChrisComplete/2022/09/24/OpenBMC-User-Management/</loc>
+    
+    <lastmod>2023-03-27</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+
+  <url>
+    <loc>https://chris-suo.github.io/ChrisComplete</loc>
+    <lastmod>2024-06-27</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  
+  <url>
+    <loc>https://chris-suo.github.io/ChrisComplete/tags/C/</loc>
+    <lastmod>2024-06-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://chris-suo.github.io/ChrisComplete/tags/Git/</loc>
+    <lastmod>2024-06-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://chris-suo.github.io/ChrisComplete/tags/Submodule/</loc>
+    <lastmod>2024-06-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://chris-suo.github.io/ChrisComplete/tags/JavaScript/</loc>
+    <lastmod>2024-06-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://chris-suo.github.io/ChrisComplete/tags/JSON-C/</loc>
+    <lastmod>2024-06-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://chris-suo.github.io/ChrisComplete/tags/OpenBMC/</loc>
+    <lastmod>2024-06-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://chris-suo.github.io/ChrisComplete/tags/CURL/</loc>
+    <lastmod>2024-06-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://chris-suo.github.io/ChrisComplete/tags/%E7%B6%B2%E8%B7%AF%E7%88%AC%E8%9F%B2/</loc>
+    <lastmod>2024-06-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://chris-suo.github.io/ChrisComplete/tags/%E9%A6%AC%E7%A5%96/</loc>
+    <lastmod>2024-06-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://chris-suo.github.io/ChrisComplete/tags/%E8%A8%AD%E8%A8%88%E6%80%9D%E7%B6%AD/</loc>
+    <lastmod>2024-06-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://chris-suo.github.io/ChrisComplete/tags/%E9%B3%B6%E5%B1%B1/</loc>
+    <lastmod>2024-06-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://chris-suo.github.io/ChrisComplete/tags/%E4%B8%89%E5%B3%BD/</loc>
+    <lastmod>2024-06-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://chris-suo.github.io/ChrisComplete/tags/%E6%9A%97%E7%A4%BA/</loc>
+    <lastmod>2024-06-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://chris-suo.github.io/ChrisComplete/tags/%E7%92%B0%E5%B3%B6/</loc>
+    <lastmod>2024-06-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+
+  
+  <url>
+    <loc>https://chris-suo.github.io/ChrisComplete/categories/%E7%A8%8B%E5%BC%8F%E8%A8%AD%E8%A8%88/</loc>
+    <lastmod>2024-06-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://chris-suo.github.io/ChrisComplete/categories/%E7%94%9F%E7%94%A2%E5%8A%9B%E5%B7%A5%E5%85%B7/</loc>
+    <lastmod>2024-06-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://chris-suo.github.io/ChrisComplete/categories/%E7%A8%8B%E5%BC%8F%E8%A8%AD%E8%A8%88/JavaScript/</loc>
+    <lastmod>2024-06-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://chris-suo.github.io/ChrisComplete/categories/%E7%A8%8B%E5%BC%8F%E8%A8%AD%E8%A8%88/C/</loc>
+    <lastmod>2024-06-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://chris-suo.github.io/ChrisComplete/categories/%E7%A8%8B%E5%BC%8F%E8%A8%AD%E8%A8%88/OpenBMC/</loc>
+    <lastmod>2024-06-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://chris-suo.github.io/ChrisComplete/categories/%E7%94%9F%E7%94%A2%E5%8A%9B%E5%B7%A5%E5%85%B7/Git/</loc>
+    <lastmod>2024-06-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://chris-suo.github.io/ChrisComplete/categories/%E9%81%8A%E8%A8%98/</loc>
+    <lastmod>2024-06-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://chris-suo.github.io/ChrisComplete/categories/%E9%96%B1%E8%AE%80%E7%AD%86%E8%A8%98/</loc>
+    <lastmod>2024-06-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://chris-suo.github.io/ChrisComplete/categories/%E9%96%B1%E8%AE%80%E7%AD%86%E8%A8%98/%E8%87%AA%E6%88%91%E6%88%90%E9%95%B7/</loc>
+    <lastmod>2024-06-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://chris-suo.github.io/ChrisComplete/categories/%E9%96%B1%E8%AE%80%E7%AD%86%E8%A8%98/%E9%9B%BB%E8%85%A6%E8%B3%87%E8%A8%8A/</loc>
+    <lastmod>2024-06-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+</urlset>
