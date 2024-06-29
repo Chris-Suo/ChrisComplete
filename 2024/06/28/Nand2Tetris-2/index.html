@@ -1,0 +1,740 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/ChrisComplete/img/fluid.png">
+  <link rel="icon" href="/ChrisComplete/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Chris Suo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Chapter 2. Boolean Functions and Gate Logic電腦使用布林值(boolean)進行運算，布林值的值域為0或1(開或關)。常見的布林運算(Boolean Operations)包含：and&#x2F;or&#x2F;not。 布林表達式(Boolean Expressions)就是以布林值與布林運算組成的式子，例如：  1 AND (0 OR (NOT (1)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="From Nand to Tetris系列（二）">
+<meta property="og:url" content="https://chris-suo.github.io/ChrisComplete/2024/06/28/Nand2Tetris-2/index.html">
+<meta property="og:site_name" content="Chris Complete">
+<meta property="og:description" content="Chapter 2. Boolean Functions and Gate Logic電腦使用布林值(boolean)進行運算，布林值的值域為0或1(開或關)。常見的布林運算(Boolean Operations)包含：and&#x2F;or&#x2F;not。 布林表達式(Boolean Expressions)就是以布林值與布林運算組成的式子，例如：  1 AND (0 OR (NOT (1)">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-06-28T05:57:56.000Z">
+<meta property="article:modified_time" content="2024-06-28T04:35:50.605Z">
+<meta property="article:author" content="Chris Suo">
+<meta property="article:tag" content="System">
+<meta property="article:tag" content="From Nand to Tetris">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>From Nand to Tetris系列（二） - Chris Complete</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/ChrisComplete/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/ChrisComplete/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/ChrisComplete/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"chris-suo.github.io","root":"/ChrisComplete/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/ChrisComplete/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/ChrisComplete/js/utils.js" ></script>
+  <script  src="/ChrisComplete/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 40vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/ChrisComplete/">
+      <strong>Chris Complete</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/ChrisComplete/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/ChrisComplete/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/ChrisComplete/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/ChrisComplete/img/post.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="From Nand to Tetris系列（二）"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-06-28 13:57" pubdate>
+          June 28, 2024 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          17 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">From Nand to Tetris系列（二）</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="Chapter-2-Boolean-Functions-and-Gate-Logic"><a href="#Chapter-2-Boolean-Functions-and-Gate-Logic" class="headerlink" title="Chapter 2. Boolean Functions and Gate Logic"></a>Chapter 2. Boolean Functions and Gate Logic</h2><p>電腦使用布林值(boolean)進行運算，布林值的值域為0或1(開或關)。<br>常見的布林運算(Boolean Operations)包含：and&#x2F;or&#x2F;not。</p>
+<p>布林表達式(Boolean Expressions)就是以布林值與布林運算組成的式子，例如：</p>
+<blockquote>
+<p>1 AND (0 OR (NOT (1))) &#x3D; 1 AND (0 OR 0) &#x3D; 1 AND 0 &#x3D; 0</p>
+</blockquote>
+<p>下面是一個布林函式(Boolean Functions)的例子：</p>
+<blockquote>
+<p>f(x, y, z) &#x3D; (x AND y) OR (NOT(x) AND z)</p>
+</blockquote>
+<p>其中等號後面的式子(formula)就是函式內容。</p>
+<p>簡化或計算(Evaluate)函式的方法可以透過列真值表(Truth Table)，或者使用布林代數(Boolean Algebra)的一些特性，例如：布林恆等式(Boolean Identities)。</p>
+<p>下面是幾種恆等式的定律：</p>
+<ol>
+<li><p>交換率(Commutative Laws)</p>
+<blockquote>
+<p>(x AND y) &#x3D; (y AND x)<br>(x OR y) &#x3D; (y OR x)</p>
+</blockquote>
+</li>
+<li><p>關聯(Associative Laws)</p>
+<blockquote>
+<p>(x AND (y AND z)) &#x3D; ((x AND y) AND z)<br>(x OR (y OR z)) &#x3D; ((x OR y) OR z)</p>
+</blockquote>
+</li>
+<li><p>分配律(Distributive Laws)</p>
+<blockquote>
+<p>(x ADN (y OR z)) &#x3D; (x AND y) OR (x AND z)<br>(x OR (y AND z)) &#x3D; (x OR y) AND (x OR z)</p>
+</blockquote>
+</li>
+<li><p>狄摩根定律(De Morgan Laws)</p>
+<blockquote>
+<p>NOT(x AND y) &#x3D; NOT(x) OR NOT(y)<br>NOT(x OR y) &#x3D; NOT(x) AND NOT(y)</p>
+</blockquote>
+</li>
+</ol>
+<p>布林代數簡化的例子：</p>
+<blockquote>
+<p>NOT(NOT(x) AND NOT(x OR y))<br>&#x3D; NOT(NOT(x) AND (NOT(x) AND NOT(y))) &#x2F;&#x2F; De Morgan Law<br>&#x3D; NOT((NOT(x) AND NOT(x)) AND NOT(y)) &#x2F;&#x2F; Associative Law<br>&#x3D; NOT(NOT(x) AND NOT(y)) &#x2F;&#x2F; Idempotence<br>&#x3D; NOT(NOT(x)) OR NOT(NOT(y)) &#x2F;&#x2F; De Morgan Law<br>&#x3D; x OR y &#x2F;&#x2F; Double Negation</p>
+</blockquote>
+<p>實際上在設計邏輯電路時，我們更需要的是將真值表轉換為布林表達式。<br>我們會設計電路上的輸入與輸出，但如何轉換或建構(Construct)成對應的邏輯閘就是一個問題。</p>
+<p>這邊是一個例子，假設有一張真值表：</p>
+<table>
+<thead>
+<tr>
+<th>x</th>
+<th>y</th>
+<th>z</th>
+<th>f</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+</tr>
+</tbody></table>
+<p>我們實際上只需要關心輸出為1的部分，即：</p>
+<blockquote>
+<p>(NOT(x) AND NOT(y) AND NOT(z))<br>OR<br>(NOT(x) AND y AND NOT(z))<br>OR<br>(x AND NOT(y) AND NOT(z))</p>
+</blockquote>
+<p>這個式子可以簡化為：</p>
+<blockquote>
+<p>NOT(z) AND (NOT(x) OR NOT(y))</p>
+</blockquote>
+<p>目前沒有一個演算法可以有效的進行化簡，事實上這個問題是一個NP-Hard Problem。</p>
+<p>一個重要的定理是：任何布林函式都可以使用AND&#x2F;OR&#x2F;NOT運算來表達。<br>因此只要使用NAND邏輯閘即可表示任何布林函式。</p>
+<blockquote>
+<p>NOT(x) &#x3D; x NAND x<br>x AND y &#x3D; NOT(x NAND y)<br>x OR y &#x3D; NOT(NOT(x) AND NOT(y))</p>
+</blockquote>
+<p>邏輯閘(Logic Gate)：用來實作布林函式的硬體裝置。</p>
+<p>電路實現(Circuit Implementations)：<br>如果想要也可以透過電路的方式實作邏輯閘，將AND gate類比於電路的話，就類似串連，OR gate則是並聯。</p>
+<p>Hardware Description Language (HDL)：<br>我們可以用一種高階語言對邏輯閘進行描述，這種方式可以方便地進行模擬。</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs verilog">CHIP Xor&#123;<br>	<span class="hljs-comment">// interface</span><br>	IN a, b;<br>	OUT out;<br><br>	<span class="hljs-comment">// implementation</span><br>	Not(in=a, out=nota);<br>	Not(in=b, out=notb);<br>	And(a=a, b=notb, out=aAndNotb);<br>	And(a=nota, b=b, out=notaAndb);<br>	Or(a=aAndNotb, b=notaAndb, out=out);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>Multi-bit Buses：<br>可以用類似陣列的寫法來表示bus，例如：a[16]代表16個bit寬的bus。<br>此外支援overlap的寫法，例如：a[16], out[0..10]&#x3D;a<br>可以透過ture&#x2F;false來設定bus中所有bit為1或0。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/ChrisComplete/categories/%E9%96%B1%E8%AE%80%E7%AD%86%E8%A8%98/" class="category-chain-item">閱讀筆記</a>
+  
+  
+    <span>></span>
+    
+  <a href="/ChrisComplete/categories/%E9%96%B1%E8%AE%80%E7%AD%86%E8%A8%98/%E9%9B%BB%E8%85%A6%E8%B3%87%E8%A8%8A/" class="category-chain-item">電腦資訊</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/ChrisComplete/tags/System/">#System</a>
+      
+        <a href="/ChrisComplete/tags/From-Nand-to-Tetris/">#From Nand to Tetris</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>From Nand to Tetris系列（二）</div>
+      <div>https://chris-suo.github.io/ChrisComplete/2024/06/28/Nand2Tetris-2/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Chris Suo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>June 28, 2024</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>Licensed under</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/ChrisComplete/2024/06/28/Nand2Tetris-3/" title="From Nand to Tetris系列（三）">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">From Nand to Tetris系列（三）</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/ChrisComplete/2024/06/28/Nand2Tetris-1/" title="From Nand to Tetris系列（一）">
+                        <span class="hidden-mobile">From Nand to Tetris系列（一）</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/ChrisComplete/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.7.2/gitalk.min.js', function() {
+        var options = Object.assign(
+          {"clientID":"f1123deada6ef69bc3fc","clientSecret":"2e6832b420ba87dbc43d9f4b089651975ac16e21","repo":"ChrisComplete","owner":"Chris-Suo","admin":["Chris-Suo"],"language":"en","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
+          {
+            id: 'fefc713161b4ab192bd31613dc94412c'
+          }
+        )
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       Copyright © 2022 Chris. All rights reserved.<br/> This blog is made by <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a><br/> Theme is <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/ChrisComplete/js/events.js" ></script>
+<script  src="/ChrisComplete/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/ChrisComplete/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/ChrisComplete/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/ChrisComplete/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
