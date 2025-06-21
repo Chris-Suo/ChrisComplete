@@ -1,0 +1,783 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/ChrisComplete/img/fluid.png">
+  <link rel="icon" href="/ChrisComplete/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Chris Suo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Chapter 5. Machine Language (Part 2)Hack程式語言前面介紹的兩種指令格式(A-instruction, C-instruction)是為了方便人類閱讀，但實際上計算機只能理解由0與1組成的指令，因此指令還需要透過組譯器(assembler)轉譯成binary code才能讓機器執行。另一種將指令轉為binary code的做法是透過CPU模擬器。 以較低層次的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="From Nand to Tetris系列（六）">
+<meta property="og:url" content="https://chris-suo.github.io/ChrisComplete/2024/07/01/Nand2Tetris-6/index.html">
+<meta property="og:site_name" content="Chris Complete">
+<meta property="og:description" content="Chapter 5. Machine Language (Part 2)Hack程式語言前面介紹的兩種指令格式(A-instruction, C-instruction)是為了方便人類閱讀，但實際上計算機只能理解由0與1組成的指令，因此指令還需要透過組譯器(assembler)轉譯成binary code才能讓機器執行。另一種將指令轉為binary code的做法是透過CPU模擬器。 以較低層次的">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-07-01T11:19:56.000Z">
+<meta property="article:modified_time" content="2024-07-20T10:24:39.953Z">
+<meta property="article:author" content="Chris Suo">
+<meta property="article:tag" content="System">
+<meta property="article:tag" content="From Nand to Tetris">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>From Nand to Tetris系列（六） - Chris Complete</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/ChrisComplete/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/ChrisComplete/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/ChrisComplete/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"chris-suo.github.io","root":"/ChrisComplete/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/ChrisComplete/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/ChrisComplete/js/utils.js" ></script>
+  <script  src="/ChrisComplete/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 40vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/ChrisComplete/">
+      <strong>Chris Complete</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/ChrisComplete/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/ChrisComplete/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/ChrisComplete/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/ChrisComplete/img/post.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="From Nand to Tetris系列（六）"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-07-01 19:19" pubdate>
+          July 1, 2024 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.6k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          30 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">From Nand to Tetris系列（六）</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="Chapter-5-Machine-Language-Part-2"><a href="#Chapter-5-Machine-Language-Part-2" class="headerlink" title="Chapter 5. Machine Language (Part 2)"></a>Chapter 5. Machine Language (Part 2)</h2><h3 id="Hack程式語言"><a href="#Hack程式語言" class="headerlink" title="Hack程式語言"></a>Hack程式語言</h3><p>前面介紹的兩種指令格式(A-instruction, C-instruction)是為了方便人類閱讀，但實際上計算機只能理解由0與1組成的指令，因此指令還需要透過組譯器(assembler)轉譯成binary code才能讓機器執行。<br>另一種將指令轉為binary code的做法是透過CPU模擬器。</p>
+<p>以較低層次的觀點來看，一個程式語言需要處理下面幾個問題：</p>
+<ul>
+<li>如何操作暫存器(register)與記憶體(memory)</li>
+<li>指令分歧(Branching)</li>
+<li>變數(Variables)</li>
+<li>迭代&#x2F;迴圈(Iteration)</li>
+<li>指標(Pointers)</li>
+<li>輸入與輸出(Input&#x2F;Output)</li>
+</ul>
+<h4 id="暫存器-register-與記憶體-memory"><a href="#暫存器-register-與記憶體-memory" class="headerlink" title="暫存器(register)與記憶體(memory)"></a>暫存器(register)與記憶體(memory)</h4><p>Hack的架構中有兩個暫存器與一個記憶體：</p>
+<blockquote>
+<p>D: Data Register<br>A: Address Register &#x2F; Data Register<br>M: the currently select memory register, M&#x3D;RAM[A]</p>
+</blockquote>
+<p>Example 1:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs assembly">// D=10<br>@10<br>D=A<br></code></pre></td></tr></table></figure>
+
+<p>Example 2:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs assembly">// D++<br>D=D+1<br></code></pre></td></tr></table></figure>
+
+<p>Example 3:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs assembly">//D=RAM[17]<br>@17<br>D=M<br></code></pre></td></tr></table></figure>
+
+<p>Example 4:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs assembly">//RAM[17]=0<br>@17<br>M=D<br></code></pre></td></tr></table></figure>
+
+<p>Example 5:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs assembly">// RAM[17]=10<br>@10<br>D=A<br>@17<br>M=D<br></code></pre></td></tr></table></figure>
+
+<p>Example 6:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs assembly">//RAM[5] = RAM[3]<br>@3<br>D=M<br>@5<br>M=D<br></code></pre></td></tr></table></figure>
+
+<p>Example 7:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs assembly">// Copmutes: RAM[2] = RAM[0] + RAM[1]<br>// Usage: put value in RAM[0], RAM[1]<br>@0<br>D=M // D= RAM[0]<br>@1<br>D=D+M // D= D+RAM[1]<br>@2<br>M=D // RAM[2] = D<br></code></pre></td></tr></table></figure>
+
+<p>使用模擬器時，可能會發現一個現象：程式一直跑下去，無法終止。<br>如果這時候在其他記憶體位置被植入惡意程式，很有可能就會意外的被執行，這種攻擊方式就是：NOP(Null Opertion) slide攻擊。</p>
+<p>因此好的習慣是使用無窮迴圈來作為程式結束的地方：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs assembly">@6 // in line 6<br>0; JMP<br></code></pre></td></tr></table></figure>
+
+<p><strong>Built-in Symbols</strong><br>16組Virtual Register與I&#x2F;O：</p>
+<table>
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>R0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>R1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>R1</td>
+<td>2</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+</tr>
+<tr>
+<td>R15</td>
+<td>15</td>
+</tr>
+<tr>
+<td>SCREEN</td>
+<td>16384</td>
+</tr>
+<tr>
+<td>KBD</td>
+<td>24576</td>
+</tr>
+</tbody></table>
+<p>透過這些virtual register symbols可以增加程式的可讀性：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs assembly">//RAM[5] = 15<br>@15<br>D=A<br><br>@R5 // == @5<br>M=D<br></code></pre></td></tr></table></figure>
+
+<p>另外有一些symbols在目前沒有使用，是用於未來實作Hack虛擬機(Virtual Machine)用的：</p>
+<table>
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SP</td>
+<td>0</td>
+</tr>
+<tr>
+<td>LCL</td>
+<td>1</td>
+</tr>
+<tr>
+<td>ARG</td>
+<td>2</td>
+</tr>
+<tr>
+<td>THIS</td>
+<td>3</td>
+</tr>
+<tr>
+<td>THAT</td>
+<td>4</td>
+</tr>
+</tbody></table>
+<h4 id="指令分歧-Branching"><a href="#指令分歧-Branching" class="headerlink" title="指令分歧(Branching)"></a>指令分歧(Branching)</h4><p>分歧用來決定程式執行的順序。<br>Example:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs assembly">// Computes: if R0 &gt; 0<br>//               R1 = 1<br>//           else<br>//               R1 = 0<br><br>@R0<br>D=M // D=RAM[0]<br><br>@8<br>D;JGT<br><br>@R1<br>M=0 // RAM[1] = 0<br>@10<br>0;JMP // end of program<br><br>@R1 // Line 8<br>M=1 // R1 = 1<br><br>@10 // Line 10<br>0; JMP<br></code></pre></td></tr></table></figure>
+
+<p>不過上面的例子可讀性很低，這邊可以使用“符號引用(symbolic references)”與“標籤(label)”的功能來改寫：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs assembly">@R0<br>D=M // D=RAM[0]<br><br>@POSITIVE<br>D;JGT<br><br>@R1<br>M=0 // RAM[1] = 0<br>@END<br>0;JMP // end of program<br><br>(POSITIVE)<br>@R1 // Line 8<br>M=1 // R1 = 1<br><br>(END)<br>@END<br>0; JMP<br></code></pre></td></tr></table></figure>
+
+<h4 id="變數-Variables"><a href="#變數-Variables" class="headerlink" title="變數(Variables)"></a>變數(Variables)</h4><p>變數是一個用來儲存值的容器，在Hack中使用一個16bits大小的暫存器來表示所有的變數。<br>Example:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs assembly">// Flips the values of RAM[0] and RAM[1]<br><br>// temp = R1<br>// R1 = R0<br>// R0 = temp<br><br>@R1<br>D=M<br>@temp<br>M=D // temp = R1<br><br>@R0<br>D=M<br>@R1<br>M=D // R1 = R0<br><br>@temp<br>D=M<br>@R0<br>M=D // R0 = temp<br><br>(END)<br>@END<br>0;JMP<br></code></pre></td></tr></table></figure>
+
+<p>使用@temp代表：找到一個可用的記憶體暫存器，並且用這個暫存器替代變數temp。<br>實作這個組譯器的人需要遵守兩個合約(Contract)：</p>
+<ol>
+<li>沒有對應label的symbol引用，會被視為變數</li>
+<li>變數要從位置16以後開始進行分配</li>
+</ol>
+<p>透過上面的標籤方法，我們可以實現“可重定位程式碼(relocatable code)”。</p>
+<h4 id="迭代-x2F-迴圈-Iteration"><a href="#迭代-x2F-迴圈-Iteration" class="headerlink" title="迭代&#x2F;迴圈(Iteration)"></a>迭代&#x2F;迴圈(Iteration)</h4><p>假設我們要計算下面這個公式：</p>
+<blockquote>
+<p>1+2+…+n</p>
+</blockquote>
+<p>可以用下面的方式實現：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><code class="hljs assembly">// Computes RAM[1] = 1 + 2 + ... + RAM[0]<br><br>@R0<br>D=M<br><br>@n<br>M=D //n = R0<br><br>@i<br>M=1 // i = 1<br>@sum<br>M=0 // sum = 0<br><br>(LOOP)<br>@i<br>D=M<br>@n<br>D=D-M<br>@STOP<br>D;JGT // if i &gt; n goto STOP<br><br>@sum<br>D=M<br>@i<br>D=D+M<br>@sum<br>M=D // sum = sum + i<br><br>@i<br>M=M+1 // i = i + 1<br>@LOOP<br>0;JMP<br><br>(STOP)<br>@sum<br>D=M<br>@R1<br>M=D // R1 = sum<br><br>(END)<br>@END<br>0;JMP<br></code></pre></td></tr></table></figure>
+
+<p>撰寫Hack的最佳實踐過程：</p>
+<ol>
+<li>Design。先以pseudo code撰寫功能。</li>
+<li>Write。再將其翻譯成組合語言。</li>
+<li>Test。透過紙筆進行暫存器&#x2F;記憶體的追蹤模擬。</li>
+</ol>
+<h4 id="指標-Pointers"><a href="#指標-Pointers" class="headerlink" title="指標(Pointers)"></a>指標(Pointers)</h4><p>假設我們需要對一個陣列進行操作：<br>Example:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><code class="hljs ASSEMBLY">// for (i=0; i&lt;n; i++)&#123;<br>//     arr[i] = -1;<br>// &#125;<br>// suppose that arr=100 and n=10<br><br>// arr = 100<br>@100<br>D=A<br>@arr<br>M=D<br><br>// n = 10<br>@10<br>D=A<br>@n<br>M=D<br><br>// initialize i = 0<br>@i<br>M=0<br><br>(LOOP)<br>// if(i==n) goto END<br>@i<br>D=M<br>@n<br>D=D-M<br>@END<br>D;JEQ<br><br>// RAM[arr+i] = -1<br>@arr<br>D=M<br>@i<br>A=D+M // 直接指定Address<br>M=-1<br><br>// i++<br>@i<br>M=M+1<br><br>@LOOP<br>0;JMP<br><br>(END)<br>@END<br>0;JMP<br><br></code></pre></td></tr></table></figure>
+<p>像這樣保存記憶體位置的變數（例如arr、i）就稱為指標。<br>在HACK中的典型作法是：將“地址暫存器”設定為“記憶體暫存器的內容”，例如A&#x3D;M這樣的指令。</p>
+<h4 id="輸入與輸出-Input-x2F-Output"><a href="#輸入與輸出-Input-x2F-Output" class="headerlink" title="輸入與輸出(Input&#x2F;Output)"></a>輸入與輸出(Input&#x2F;Output)</h4><p>如先前提到的，輸入與輸出（鍵盤與螢幕）分別被對應在記憶體上。<br>螢幕(SCREEN)是從位址16384開始的8K範圍，鍵盤(KBD)則是在位址24576。</p>
+<p>假設我們想在螢幕左上角畫一個16 pixel寬的矩形，而RAM[0]提供使用者定義矩形的長。</p>
+<p>Example:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs Pseudo">addr = SCREEN<br>n = RAM[0]<br>i = 0<br><br>LOOP:<br>    if i &gt; n goto END<br>    RAM[addr] = -1 // 111111111111111<br>    addr = addr+32<br>    i = i+1<br>END:<br>    goto END<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs ASSEMBLY">@R0<br>D=M<br>@n<br>M=D // n = RAM[0]<br><br>@i<br>M=D // i = 0<br><br>@SCREEN<br>D=A<br>@address<br>M=D // address = 16384<br><br>(LOOP)<br>@i<br>D=M<br>@n<br>D=D-M<br>@END<br>D;JGT // if i&gt;n goto END<br><br>@address<br>A=M<br>M=-1 // RAM[address] = -1 (16 pixels)<br><br>@i<br>M=M+1 // i = i+1<br>@32<br>D=A<br>@address<br>M=D+M // address = address +32<br>@LOOP<br>0;JMP // goto LOOP<br><br>(END)<br>@END<br>0;JMP<br></code></pre></td></tr></table></figure>
+
+<p>本週的作業是使用Hack Assembly撰寫兩個程式：</p>
+<ol>
+<li>乘法運算：計算R2 &#x3D; R0*R1</li>
+<li>簡單交互程式：偵測使用者按下任何按鍵，將螢幕顯示為黑色</li>
+</ol>
+<p>幾個提示：</p>
+<ol>
+<li>使用變數(Variables)與標籤(Labels)</li>
+<li>使用有意義的變數與標籤名稱</li>
+<li>變數使用小寫</li>
+<li>標籤使用大寫</li>
+<li>使用縮排(indentation)</li>
+<li>先寫虛擬碼(pseudo code)</li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/ChrisComplete/categories/%E9%96%B1%E8%AE%80%E7%AD%86%E8%A8%98/" class="category-chain-item">閱讀筆記</a>
+  
+  
+    <span>></span>
+    
+  <a href="/ChrisComplete/categories/%E9%96%B1%E8%AE%80%E7%AD%86%E8%A8%98/%E9%9B%BB%E8%85%A6%E8%B3%87%E8%A8%8A/" class="category-chain-item">電腦資訊</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/ChrisComplete/tags/System/">#System</a>
+      
+        <a href="/ChrisComplete/tags/From-Nand-to-Tetris/">#From Nand to Tetris</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>From Nand to Tetris系列（六）</div>
+      <div>https://chris-suo.github.io/ChrisComplete/2024/07/01/Nand2Tetris-6/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Chris Suo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>July 1, 2024</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>Licensed under</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/ChrisComplete/2024/07/22/Nand2Tetris-7/" title="From Nand to Tetris系列（七）">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">From Nand to Tetris系列（七）</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/ChrisComplete/2024/06/28/Nand2Tetris-5/" title="From Nand to Tetris系列（五）">
+                        <span class="hidden-mobile">From Nand to Tetris系列（五）</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/ChrisComplete/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.7.2/gitalk.min.js', function() {
+        var options = Object.assign(
+          {"clientID":"f1123deada6ef69bc3fc","clientSecret":"2e6832b420ba87dbc43d9f4b089651975ac16e21","repo":"ChrisComplete","owner":"Chris-Suo","admin":["Chris-Suo"],"language":"en","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
+          {
+            id: '2aada06afa20d1bcb0c62fc50749126b'
+          }
+        )
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       Copyright © 2022 Chris. All rights reserved.<br/> This blog is made by <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a><br/> Theme is <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/ChrisComplete/js/events.js" ></script>
+<script  src="/ChrisComplete/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/ChrisComplete/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/ChrisComplete/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/ChrisComplete/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,636 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/ChrisComplete/img/fluid.png">
+  <link rel="icon" href="/ChrisComplete/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Chris Suo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="大話行動通訊01. 點對點的無線通訊-從貝爾到摩斯1.1 古代通訊的智慧與煩惱通訊：傳輸端接收端介質編碼 上古時代：雞犬之聲相聞，老死不相往來通訊在自家 春秋時代：聞鼓而進，聞金而退軍隊指揮通訊系統 只有0&#x2F;1，如何提升訊息量？孫子兵法：凡制眾如制寡，分數是也；鬥眾如鬥寡，形名是也分數：對部隊進行編號形名：旗語 烽火台延長距離：朔方烽火照甘泉，長安飛將出祁連中繼 安全性問題，陰符加密分成">
+<meta property="og:type" content="article">
+<meta property="og:title" content="大話行動通訊">
+<meta property="og:url" content="https://chris-suo.github.io/ChrisComplete/2024/07/27/MobileTelecommunicationsSystem/index.html">
+<meta property="og:site_name" content="Chris Complete">
+<meta property="og:description" content="大話行動通訊01. 點對點的無線通訊-從貝爾到摩斯1.1 古代通訊的智慧與煩惱通訊：傳輸端接收端介質編碼 上古時代：雞犬之聲相聞，老死不相往來通訊在自家 春秋時代：聞鼓而進，聞金而退軍隊指揮通訊系統 只有0&#x2F;1，如何提升訊息量？孫子兵法：凡制眾如制寡，分數是也；鬥眾如鬥寡，形名是也分數：對部隊進行編號形名：旗語 烽火台延長距離：朔方烽火照甘泉，長安飛將出祁連中繼 安全性問題，陰符加密分成">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-07-27T11:07:22.000Z">
+<meta property="article:modified_time" content="2024-08-10T10:48:13.165Z">
+<meta property="article:author" content="Chris Suo">
+<meta property="article:tag" content="行動通訊">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>大話行動通訊 - Chris Complete</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/ChrisComplete/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/ChrisComplete/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/ChrisComplete/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"chris-suo.github.io","root":"/ChrisComplete/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/ChrisComplete/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/ChrisComplete/js/utils.js" ></script>
+  <script  src="/ChrisComplete/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 40vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/ChrisComplete/">
+      <strong>Chris Complete</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/ChrisComplete/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/ChrisComplete/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/ChrisComplete/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/ChrisComplete/img/post.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="大話行動通訊"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-07-27 19:07" pubdate>
+          July 27, 2024 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.2k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          19 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">大話行動通訊</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="大話行動通訊"><a href="#大話行動通訊" class="headerlink" title="大話行動通訊"></a>大話行動通訊</h1><h2 id="01-點對點的無線通訊-從貝爾到摩斯"><a href="#01-點對點的無線通訊-從貝爾到摩斯" class="headerlink" title="01. 點對點的無線通訊-從貝爾到摩斯"></a>01. 點對點的無線通訊-從貝爾到摩斯</h2><h3 id="1-1-古代通訊的智慧與煩惱"><a href="#1-1-古代通訊的智慧與煩惱" class="headerlink" title="1.1 古代通訊的智慧與煩惱"></a>1.1 古代通訊的智慧與煩惱</h3><p>通訊：<br>傳輸端<br>接收端<br>介質<br>編碼</p>
+<p>上古時代：雞犬之聲相聞，老死不相往來<br>通訊在自家</p>
+<p>春秋時代：聞鼓而進，聞金而退<br>軍隊指揮通訊系統</p>
+<p>只有0&#x2F;1，如何提升訊息量？<br>孫子兵法：凡制眾如制寡，分數是也；鬥眾如鬥寡，形名是也<br>分數：對部隊進行編號<br>形名：旗語</p>
+<p>烽火台延長距離：朔方烽火照甘泉，長安飛將出祁連<br>中繼</p>
+<p>安全性問題，陰符加密<br>分成多份，陰書</p>
+<p>1864年麥克斯韋電磁波<br>1887年赫茲證明<br>1895馬克尼發明無線電報機</p>
+<h3 id="1-2從「貝爾電話」解剖現代通訊系統架構"><a href="#1-2從「貝爾電話」解剖現代通訊系統架構" class="headerlink" title="1.2從「貝爾電話」解剖現代通訊系統架構"></a>1.2從「貝爾電話」解剖現代通訊系統架構</h3><p>電話之父貝爾<br>貝爾遇到的第一個挑戰：怎樣把聲波轉化為電訊號<br>1876年愛迪生發明了炭精式發話器</p>
+<p>解剖有線電話-類比通訊系統架構<br>訊號源與輸入變換器 - 調變器 - 通道(噪音) - 解調器 - 輸出變換器與輸出訊號</p>
+<p>「0」和「1」的時代-數位通訊系統架構<br>訊號源與輸入變換器 - 數位編碼器(訊源編碼器 + 通道編碼)  - 調變器 - 通道(噪音) - 解調器 - 數位解碼器(通道解碼 + 數位解碼器) - 輸出變換器與輸出訊號<br>訊源編碼：編碼盡可能簡潔、減少冗餘資訊<br>通道編碼：能夠抗雜訊</p>
+<p>數位通訊為何獨領風騷<br>奈奎斯特定理：採樣頻率大於兩倍帶限訊號頻寬時，訊號可以完全由其採樣樣本來恢復<br>衝激採樣物理上不可能實現<br>零階保持採樣也不可能真正實現<br>無可避免的失真<br>量化也會失真</p>
+<p>數位通訊的優勢：雜訊的處理、保密</p>
+<h3 id="1-3-「貝爾話筒」的工作之一-接收訊號"><a href="#1-3-「貝爾話筒」的工作之一-接收訊號" class="headerlink" title="1.3 「貝爾話筒」的工作之一-接收訊號"></a>1.3 「貝爾話筒」的工作之一-接收訊號</h3><p>何謂訊號-從狼煙到電磁波<br>電磁訊號：一個時間函數，還可以表示為頻率的函數</p>
+<p>訊號的時域概念<br>類比訊號(analog signal)：一段時間內，訊號強度是平滑的，沒有中斷或連續<br>數位訊號(digital signal)：一段時間內，訊號強度保持某個常量值，然後在下一時段又變化為另一個常量值</p>
+<p>週期訊號：週而復始不斷重複的訊號<br>s(t+T) &#x3D; s(t)，T為訊號週期</p>
+<p>以正弦波為例，簡單正弦波可以用3個參數表示：<br>A幅度<br>f頻率<br>theta 相位<br>S(t) &#x3D; Asin(2pift+theta)</p>
+<p>訊號的頻域概念<br>一個電磁波會由多種頻率組成<br>作為週期訊號的方波可以近似地用正弦訊號及其諧波訊號來表示，那麼其他週期訊號是否也具有同樣的性質呢？</p>
+<h3 id="1-4-「貝爾話筒」的工作之二-分析訊號"><a href="#1-4-「貝爾話筒」的工作之二-分析訊號" class="headerlink" title="1.4 「貝爾話筒」的工作之二-分析訊號"></a>1.4 「貝爾話筒」的工作之二-分析訊號</h3><p>在一般的語音通訊系統中，通常以20ms為單位對訊號進行抽取然後編碼。</p>
+<p>始於歐拉，成於傅立葉<br>1748年歐拉：如果某一時刻震動弦的形狀是其諧波的組合，那麼在其後任何時刻，震動弦的形狀也都是這些震盪諧波的組合<br>1753年伯努力：一根弦的實際運動都可以用震盪諧波的線性組合來表示<br>1759年拉格朗日批評使用三角函數來研究震動弦的主張無用，因為實際訊號往往是有中斷點的。<br>1807年傅立葉：任何週期訊號都可以用成諧波關係的正弦函數級數來表示<br>狄裡赫利證明：在一定條件下，週期訊號都可以用成諧波關係的正弦函數級數來表示</p>
+<p>傅立葉級數<br>如果一個訊號是週期的，那麼對於一切t，存在某個正值的T：x(t) &#x3D; x(t+T)<br>週期複指數訊號：x(t) &#x3D; e^(jw0t) &#x3D; cosw0t + jsinw0t</p>
+<p>將週期訊號理解為：基波訊號和諧波訊號的疊加</p>
+<p>傅立葉分析<br>非週期訊號可以看作週期無限長的週期訊號。</p>
+<h3 id="1-5-「貝爾話筒」的工作之三-如何把類比訊號變為數位訊號"><a href="#1-5-「貝爾話筒」的工作之三-如何把類比訊號變為數位訊號" class="headerlink" title="1.5 「貝爾話筒」的工作之三-如何把類比訊號變為數位訊號"></a>1.5 「貝爾話筒」的工作之三-如何把類比訊號變為數位訊號</h3><p>類比到數位包含「抽樣」、「量化」兩大過程</p>
+<p>聲音是如何變成位元流的-奈奎斯特採樣定理<br>如果一個訊號是帶限的（即他的傅立葉轉換在某一有限頻帶範圍以外均為零），如果採樣的樣本足夠密（採樣頻率大於訊號頻寬的兩倍），那麼就可以無失真地還原訊號</p>
+<p>人發出的聲音一般為85<del>1100Hz，而1</del>4kHz也是人耳非常敏感的頻率範圍。<br>GSM規範規定GSM手機採樣頻率為8kHz。</p>
+<p>從原始分到標準分-量化</p>
+<ol>
+<li>均勻量化<br>把輸入訊號的取值等距離分割的量化方式。<br>假設輸入訊號的最小值與最大值分別是a、b，量化電平為M，則：dV &#x3D; (b-a) &#x2F; M</li>
+</ol>
+<p>好處是方便進行處理，代價是產生失真（量化誤差&#x2F;量化雜訊）<br>均勻量化對於小訊號而言誤差比較大，噪訊比的結果比較差。</p>
+<ol start="2">
+<li>非均勻量化<br>實際上非均勻量化的實現方法通常就是將採樣值經過壓縮後再進行均勻量化。<br>壓縮就是用一個非線性變換電路將輸入變數x變換為變數y：y&#x3D;f(x)<br>通常使用對數式壓縮：y&#x3D;ln(x)<br>美國採用m律壓縮，中國和歐洲採用A律壓縮。<br>A律壓縮就是具有如下特性的壓縮律：y&#x3D;Ax&#x2F;1+lnA, 0&lt;x&lt;&#x3D;1&#x2F;A<br>A為壓擴參數，表示壓縮程度，實際上往往選擇A&#x3D;87.6。</li>
+</ol>
+<p>從《蒹葭》和《在水一方》說起-也談編碼</p>
+<ol>
+<li>PCM碼<br>A律13折線法，用8bit來表徵，共可以表示2^8&#x3D;256個電平。</li>
+<li>DPCM（差分編碼調變）<br>PCM中每個採樣都是獨立量化的，前後無關。<br>語音訊號這樣的帶限訊號已奈奎斯特速率或者更高的速率進行採樣時，採樣值通常是相關的隨機變數。<br>如果用差值而不是絕對值進行編碼會更有效率。<br>增量調變DM就是DPCM方案中的一個版本。</li>
+</ol>
+<p>訊源編碼是以提高通訊有效性為目的的編碼，通常是透過壓縮訊源的冗餘度來實現。<br>追求相同訊息量的最少位元。</p>
+<p>為了確保資訊正確傳遞，增加冗餘資訊就稱為通道編碼。<br>通道編碼是以提高資訊傳輸的可靠性為目的的編碼。<br>三種糾錯方式：</p>
+<ol>
+<li>檢錯重發法</li>
+<li>前向糾錯法：自行糾正</li>
+<li>回饋校正法：將訊息回傳給發送端進行比較</li>
+</ol>
+<p>高中低空各有所屬-調變的意義</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/ChrisComplete/categories/%E7%A8%8B%E5%BC%8F%E8%A8%AD%E8%A8%88/" class="category-chain-item">程式設計</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/ChrisComplete/tags/%E8%A1%8C%E5%8B%95%E9%80%9A%E8%A8%8A/">#行動通訊</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>大話行動通訊</div>
+      <div>https://chris-suo.github.io/ChrisComplete/2024/07/27/MobileTelecommunicationsSystem/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>Chris Suo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>July 27, 2024</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>Licensed under</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/ChrisComplete/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.7.2/gitalk.min.js', function() {
+        var options = Object.assign(
+          {"clientID":"f1123deada6ef69bc3fc","clientSecret":"2e6832b420ba87dbc43d9f4b089651975ac16e21","repo":"ChrisComplete","owner":"Chris-Suo","admin":["Chris-Suo"],"language":"en","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
+          {
+            id: '8889a61c3d67db8e8e82e6dbbacc6de8'
+          }
+        )
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       Copyright © 2022 Chris. All rights reserved.<br/> This blog is made by <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a><br/> Theme is <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/ChrisComplete/js/events.js" ></script>
+<script  src="/ChrisComplete/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/ChrisComplete/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/ChrisComplete/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/ChrisComplete/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

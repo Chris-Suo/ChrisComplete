@@ -24,7 +24,7 @@
 <meta property="og:description" content="Chapter 5. Machine Language (Part 1)大多數的裝置只能完成單一的任務，例如洗碗機只負責洗碗，但是像電腦、手機(也算是電腦的一種)這類裝置，可以單靠同樣的硬體完成不同的工作。 電腦最早可以追朔到由Alan Turing提出的概念：圖靈機。他發現雖然有許多圖靈機，但其中有一種可以在給定正確的程式下執行各種任務(即：通用圖靈機)。 而Von Neumann是最早的電腦實">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-06-28T08:57:56.000Z">
-<meta property="article:modified_time" content="2024-06-29T14:43:57.063Z">
+<meta property="article:modified_time" content="2024-07-01T11:34:32.527Z">
 <meta property="article:author" content="Chris Suo">
 <meta property="article:tag" content="System">
 <meta property="article:tag" content="From Nand to Tetris">
@@ -285,10 +285,10 @@
 <p>syntax: @value</p>
 </blockquote>
 <p>Example 1:</p>
-<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">@<span class="hljs-number">21</span> <span class="hljs-regexp">//</span> 設定A暫存器內容為<span class="hljs-number">21</span>，且RAM[<span class="hljs-number">21</span>]為選取的暫存器(M)<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs assembly">@21 // 設定A暫存器內容為21，且RAM[21]為選取的暫存器(M)<br></code></pre></td></tr></table></figure>
 
 <p>Example 2:</p>
-<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-regexp">//</span> set RAM[<span class="hljs-number">100</span>] to -<span class="hljs-number">1</span><br>@<span class="hljs-number">100</span> <span class="hljs-regexp">//</span> A=<span class="hljs-number">100</span><br>M=-<span class="hljs-number">1</span> <span class="hljs-regexp">//</span>RAM[<span class="hljs-number">100</span>]=-<span class="hljs-number">1</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs assembly">// set RAM[100] to -1<br>@100 // A=100<br>M=-1 //RAM[100]=-1<br></code></pre></td></tr></table></figure>
 
 <p><strong>C-instruction：</strong></p>
 <blockquote>
@@ -297,16 +297,16 @@
 <p>計算結果之後，可以保存數值(將結果保存於dest)或者以計算結果作為是否跳躍的依據</p>
 <p>comp可以是：0, 1, -1, D, A, !D, !A, …<br>dest可以是：null, M, D, MD, A, AM, AD, AMD<br>jump可以是：null, JGT, JEQ, JGE, JLT, JNE, JLE, JMP<br>先進行comp的運算後，根據jump進行比較，若為真則跳躍到ROM[A]，jump永遠與數值0做比較。</p>
 <p>Example 1:</p>
-<figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mathematica"><span class="hljs-operator">//</span> <span class="hljs-built_in">Set</span> <span class="hljs-variable">the</span> <span class="hljs-built_in">D</span> <span class="hljs-variable">register</span> <span class="hljs-variable">to</span> <span class="hljs-operator">-</span><span class="hljs-number">1</span><br><span class="hljs-built_in">D</span><span class="hljs-operator">=-</span><span class="hljs-number">1</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs assembly">// Set the D register to -1<br>D=-1<br></code></pre></td></tr></table></figure>
 
 <p>Example 2:</p>
-<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-regexp">//</span> Set RAM[<span class="hljs-number">300</span>] to value of the D register minus <span class="hljs-number">1</span><br>@<span class="hljs-number">300</span> <span class="hljs-regexp">//</span> A=<span class="hljs-number">300</span><br>M=D-<span class="hljs-number">1</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs assembly">// Set RAM[300] to value of the D register minus 1<br>@300 // A=300<br>M=D-1<br></code></pre></td></tr></table></figure>
 
 <p>Example 3:</p>
-<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-comment">// if (D-1==0) jump to excute the instruction stored in ROM[56]</span><br><span class="hljs-variable">@56</span><br>D-<span class="hljs-number">1</span>;<span class="hljs-selector-tag">JEQ</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs assembly">// if (D-1==0) jump to excute the instruction stored in ROM[56]<br>@56<br>D-1;JEQ<br></code></pre></td></tr></table></figure>
 
 <p>Example 4:</p>
-<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-number">0</span>;JMP <span class="hljs-regexp">//</span> Unconditional jump<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs assembly">0;JMP // Unconditional jump<br></code></pre></td></tr></table></figure>
 
 <h3 id="Hack語言規格"><a href="#Hack語言規格" class="headerlink" title="Hack語言規格"></a>Hack語言規格</h3><p>你可以使用兩種方式撰寫Hack語言：</p>
 <ol>
@@ -763,6 +763,12 @@
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/ChrisComplete/2024/07/01/Nand2Tetris-6/" title="From Nand to Tetris系列（六）">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">From Nand to Tetris系列（六）</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
